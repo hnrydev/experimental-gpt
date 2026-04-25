@@ -10,7 +10,7 @@ pip install -r requirements.txt
 
 ## Workflow
 
-1. **Corpus:** by default training loads, in order, **`data/world_fields_primer.txt`**, **`data/short_form_primer.txt`**, **`data/modern_language_primer.txt`**, **`data/grammar_clarity_corpus.txt`** (large block of well-formed English: agreement, tense, clear paragraphs, labeled bad/good pairs—helps the LM toward clean grammar and coherent text), and **`data/input.txt`** (main long text). Edit `Config.corpus_files` in `config.py` to add files or change order. **After changing the corpus, retrain**; an old checkpoint’s vocabulary can miss new characters.
+1. **Corpus:** training loads, in order, the four primers, then grammar + general-examples (each **twice** to up-weight clean text), then optional **`data/wikipedia_corpus.txt`** (skipped until you generate it; see below), then **`data/input.txt`**. Edit `Config.corpus_files` in `config.py` to add files or change order. **After changing the corpus, retrain**; an old checkpoint’s vocabulary can miss new characters.
 2. **Train** (writes a checkpoint — path depends on profile, see below):
 
 ```bash
@@ -18,6 +18,23 @@ python train.py
 ```
 
 Quick dry run: `MAX_ITERS=100 python train.py` (PowerShell: `$env:MAX_ITERS="100"; python train.py`).
+
+### Qualitative eval (grammar, sensible text)
+
+Val loss is not enough to compare runs if your goal is **readable** output. This repo includes **`data/eval_prompts.txt`** (one prompt per line; `#` comments allowed) and **`sample_eval.py`**, which writes continuations to **`outputs/eval_samples_*.txt`** using the same “coherent”-style decoding as `chat.py --coherent` by default (tighter sampling for stability).
+
+```bash
+python sample_eval.py
+# or:  python sample_eval.py --checkpoint models/baby_gpt_fast_bpe.pt
+# or:  python sample_eval.py --no-coherent   # use config temperature / top_p
+# or:  python sample_eval.py --greedy
+```
+
+After training, run an eval in one step (optional):
+
+```powershell
+$env:RUN_EVAL="1"; python train.py
+```
 
 ### Best “communication” without an API (recommended)
 
@@ -100,6 +117,19 @@ python scripts/fetch_corpus.py --max-chars 1500000
 ```
 
 An existing `data/input.txt` is copied to `data/input.txt.bak` before overwrite.
+
+### Modern encyclopedic text (Wikipedia)
+
+For **clear, contemporary written English** (at the cost of sounding encyclopedic), run **`scripts/fetch_wikipedia_corpus.py`**. It pulls plain-text extracts from the **MediaWiki API**—default is **Simple English Wikipedia** (shorter, simpler sentences, often a good match for a small LM). Use `--mode en` for full English Wikipedia (longer, denser).
+
+Text is **CC BY-SA 4.0**; if you publish a derived dataset or model, provide appropriate **attribution** and understand **share-alike** obligations. The script adds a short license header in the file.
+
+```bash
+python scripts/fetch_wikipedia_corpus.py
+python scripts/fetch_wikipedia_corpus.py --mode en --max-chars 2000000
+```
+
+This writes **`data/wikipedia_corpus.txt`** (listed in `config.py` but **gitignored** so clones stay small). The script includes **large curated title lists** (hundreds of Simple English seeds, ~90+ extra English articles); you get as many as fit under **`--max-chars`** (default **2,500,000**). One HTTP request per title, with a short delay, per Wikimedia access norms.
 
 Training defaults in `config.py` assume a **large** corpus (`block_size` 128, deeper model). If you only have a **tiny** file, lower `block_size` / `n_layer` / `n_embd` or training may be slow for little gain.
 

@@ -1,0 +1,269 @@
+GENERAL ENGLISH EXAMPLES CORPUS
+Purpose: more training text that is only "example first" — short stories, dialogues,
+plain explanations, and everyday descriptions in clear modern English. This is not a
+grammar rule book; it is fluent text the model can mimic. Original synthetic data
+for small-LM training. Retrain after changes.
+
+=== MORNING AND EVENING ===
+She woke before the alarm and lay still until the room took shape. The floor was
+cold under her feet. In the kitchen she ground coffee, filled the kettle, and
+watched the first thin steam rise. The day had no drama yet, only a list of small
+tasks, and that was a kind of peace. By the time the sun hit the window, she had
+already answered two emails and felt, against her own advice, a little ahead of
+the world.
+
+He came home after dark, hung his coat, and noticed the cat waiting by the empty
+bowl. He fed the cat, then himself, and sat with the window open a crack, because
+the air had turned cool and the street was quiet. He thought about calling a
+friend, decided against it, and read until his eyes would not stay open. The end
+of a long day is not always a story, but it is a life, in order, one action after
+another.
+
+=== TRAVEL AND PLACES ===
+The train was late, but the platform was dry, and he had a book, so the wait
+was tolerable. When the doors opened, he found a seat by the window and watched
+the suburbs give way to fields, then to another town, where people stood with
+bikes and shopping bags. Travel by rail is a sequence of small promises: the next
+stop, the next hour, the moment you step onto a street you have never seen at
+dusk. He had no plan except dinner somewhere near the station, and that was
+enough for one evening.
+
+The hotel room was small, the bed was firm, and the view was a wall of brick, but
+the water was hot and the desk lamp was good for reading. She set her bag on the
+chair, checked the lock, and lay down without taking off her shoes, just for a
+minute, which became an hour. Cities feel different when you are tired; the noise
+becomes a blanket, and the map in your head simplifies to a line from bed to
+coffee to work and back. She liked that simplification, for a week.
+
+=== WORK AND PROJECTS ===
+The team met on Tuesday because Monday had been a holiday, and the calendar
+refused to give them another slot. They put the hard question first, argued
+without insult, and agreed to split the work into two tracks with a shared
+interface. The whiteboard was a mess, but the shared document was clean, with
+names next to every bullet. A good meeting ends with a list someone will actually
+use, not with a round of self-congratulation that erases the next step.
+
+He spent the afternoon on a bug that only appeared in production, which is the
+worst kind, because the logs are real and the theory is always a step behind. He
+reproduced it once, then lost it, then found a pattern: it happened when the cache
+expired during a handoff. The fix was small, but the write-up was long, because
+the next person would need the story, not only the diff. That is how maintenance
+stays kind.
+
+=== LEARNING ===
+She started the course because the topic interested her, not because it would
+look good on a form, and that motive carried her through the weeks when the
+reading piled up. She took notes by hand, which slowed her down in a useful way,
+because the screen invited skimming, and the page invited a sentence at a time.
+When the final project was done, she was proud of the work, not the grade, which
+is a sign that the class did what it was supposed to do, at least for her.
+
+The child asked why the river was brown after the rain, and the adult in the room
+had to choose between a long story about silt and a short story about dirt. He
+started with the short one, then added, if you want more, we can look at a map of
+the watershed. The child said yes, and the afternoon took a better turn than
+either of them had planned. Curiosity, when it is not rushed, is a form of love.
+
+=== FOOD AND COOKING ===
+The soup needed salt, not more time, and she had learned, finally, to taste before
+she added anything else. The bread was from the store, not the oven, which did
+not matter, because the evening was about warmth, not a performance. They ate
+without a screen between them, which felt old-fashioned in a way she did not
+expect to miss until she had it back, one meal at a time.
+
+He made coffee with a scale, not because he was vain, but because the ratio was
+one thing he could control on a day when everything else slid. The first sip was
+bitter, the second was sweet enough, the third was routine. Routines are underrated
+when a person is trying to rebuild a sense of ground under the feet, one habit at
+a time, without drama.
+
+=== NATURE AND WEATHER ===
+The storm rolled in from the west, and the trees showed their lighter undersides
+before the first drop fell. The dog wanted to stay outside, the sensible human
+did not, so they compromised on a short walk and a towel by the door. Afterward,
+the air smelled like wet earth, and the sidewalk sparkled in a way that only
+appears when the world has been rinsed and the sun comes back, briefly, to check
+on the damage, which, that day, was small.
+
+Snow fell overnight and covered the car in a layer thick enough to brush, not
+scrape, which felt like a gift, because the job was still annoying, but the
+light had changed, and the street was quiet. A neighbor waved from a window. Two
+children argued about a sled with the seriousness of a treaty negotiation, and
+then laughed. Winter is a season of edges: cold, bright, and honest about what a
+body can take before it needs soup.
+
+=== DIALOG: NEIGHBORS ===
+"Did you get the note about the water main?"
+"I did. They said Tuesday, eight to four, and someone has to be home."
+"I can take the morning if you take the call at work."
+"Done. I owe you a six-pack or a favor, your pick."
+"Favor. I am painting the hall next month, and a second ladder hand helps."
+
+"Is the bus always this slow on Thursdays?"
+"Often, yes. The high school gets out, and the route clogs. If you leave ten
+minutes early, you miss the worst of it, usually."
+"Good to know. I will try that Monday."
+"Monday is a different mess, but you learn the local messes in a month or so."
+
+=== DIALOG: OFFICE ===
+"I need the draft by three, not five. Legal moved the review."
+"I can do three for the first half, but the case studies need another pass."
+"Send the first half, mark the case studies TBD, and we will be honest in the
+email, not late with silence."
+"Clear. I will also flag the one chart where the axis does not start at zero."
+"Thank you. That saves a fight later when someone is awake at midnight."
+
+"Why is this deploy frozen?"
+"Staging is green, but a dependency scan flagged a known issue in a library, not
+in our code, and the policy is to hold until we either upgrade or get a written
+waiver, which I asked for an hour ago."
+"Forward me the policy link and the waiver form. I will call the right person, not
+the group inbox."
+
+=== SHORT ARTICLE: SLEEP ===
+Adults need more sleep than they often get, and the gap shows up in mood, memory,
+and the ability to make decent decisions. A regular bedtime, a cool dark room,
+and less screen time in the last hour are boring advice, because they work, and
+because the interesting fixes are usually drugs or apps that promise a shortcut
+without changing the day. A honest approach is to protect one or two late nights
+as exceptions, not as a daily identity. Small habits stack in both directions, up
+or down, so choose a direction on purpose, not by drift.
+
+=== SHORT ARTICLE: MAPS ===
+A map is a picture of a story about space, not the land itself, so every map has
+a point of view. Scale matters: a world map that fits on a phone is useful for
+orientation and useless for finding a path through a field. A hiking map with
+contour lines is honest about steepness, which a flat road map cannot be. If you
+learn to read one kind of map, you can learn to read another, but you should not
+expect to transfer the skill without practice. The best teacher is to get slightly
+lost in a place where the stakes are low, and then to find your way, slowly, on
+foot.
+
+=== FAMILY ===
+Her mother called on Sunday, as she had for years, and they talked about the same
+topics with small updates: the garden, a cousin, a show they both found too loud.
+The repetition was a comfort, not a bore, because the point was the sound of the
+other voice, not a report from a frontier. When the call ended, she made tea and
+felt a small guilt she could not name, the kind that comes from living far away
+and being happy where she is, which is not a crime, but is not free of weight.
+
+The child learned to ride a bike in the alley, with one adult running behind and
+one standing at the corner, arms wide, a human finish line. The first success was
+a wobble that did not end in blood, and the second was a straight line longer than
+a second, which is long enough, at that age, to be forever. The helmet stayed
+crooked, and the bell stayed silent, and nobody cared, because speed is its own
+music, until it is not, and a parent yells, slow, slow, in a voice that is half
+fear, half joy.
+
+=== LETTERS, MODERN (EMAIL TONE) ===
+Dear hiring team, thank you for the opportunity to speak with you yesterday. I
+enjoyed our conversation about the roadmap, and I remain interested in the role. I
+have attached the writing sample you requested, as one PDF, named as we discussed.
+I look forward to hearing your timeline for next steps. Sincerely, with full
+name and one phone number, not three.
+
+Hi Alex, quick note: I will be offline tomorrow morning for a medical appointment.
+If anything urgent hits the on-call list, I am reachable by text after eleven. I
+will catch up on messages by one. No need to reply unless there is a conflict
+with a meeting. Thanks, and I hope your kid feels better. Best, with first name
+only, because the relationship is collegial and the thread is long.
+
+=== OBSERVATION: A CITY STREET ===
+A bus stopped with a sigh of brakes, and a dozen people negotiated who would step
+aside for a stroller, who would move a bag, who would stand because kindness is
+sometimes a calculation made in a second, under breath. A musician played a tune
+that was almost familiar, and coins landed in a case, not in a hand, so the
+exchange stayed impersonal, which the crowd preferred. A dog looked up at a
+window, where a cat sat behind glass, and for a second the block had a fable
+in it, with no words, only a stare that meant nothing a human would put in a
+book, and everything a dog would need for the afternoon.
+
+=== Q AND A, CALM REGISTRY ===
+Q: How do I start a garden on a balcony? A: Use containers with drainage, good
+soil, and plants that match your light. Water on a schedule, and accept that some
+leaves will die; replace them, learn, try again. A small success is a tomato you
+grew, not a photo that matches a catalog.
+Q: Is it too late to learn an instrument? A: It is not too late. Progress may be
+slower than it would be for a child, but the goal is music in your own life, not
+a career on a stage, unless you want a career, in which case, find a teacher who
+tells the truth about hours and a body that must practice without shame.
+Q: How do I pick a used car? A: Set a budget that includes tax and a small repair
+buffer, then check history, have a trusted mechanic do a pre-purchase inspection
+if you can, and do not let paint shine replace common sense. Walk away if the
+seller rushes you; there are other cars, even when it does not feel that way in
+the moment.
+Q: What is a good way to save money without misery? A: Name one or two small cuts
+that do not hit what you need for health and safety, and automate a transfer the
+day after payday, not the last day of the month, when the account is thin. Shame
+does not make math better; a clear number does.
+
+=== MICRO-FICTION ===
+The last key turned. The house was empty, the sale was final, and she only wanted
+one last look at the back steps where her father had sat with coffee every
+morning. The steps were the same, the man was not. She took a picture for her
+sister, locked the door, and drove away without looking in the rearview mirror
+more than twice, which was all her discipline could offer that day, and that was
+enough.
+
+The letter was never opened. It sat in a drawer for years, a rectangle of
+possible news, and when she finally tore it, the ink had faded, and the answer, if
+there had been one, was a ghost. She threw the pieces away, made tea, and wrote a
+message to a friend, not about the letter, but about the weather, which is how
+we sometimes begin when the subject is too large to name.
+
+=== INSTRUCTION: PACKING A BOX ===
+Choose a box with straight corners and enough space for padding, not only for the
+item. Place heavier pieces at the bottom, lighter on top, and use paper or
+bubble, not a prayer, to fill the gaps, because empty space is where the damage
+hides. Tape the bottom twice, not once. Label with the room and a word for
+contents, not a code only you can read, because another human may carry it. If
+the item is fragile, say fragile on more than one side, and do not be shy about
+marking the top, because a box does not have feelings, and the person lifting it
+in a hurry has a back to protect, too.
+
+=== DESCRIPTIVE: A LIBRARY ===
+The building was old, the carpet was new, and the quiet had a weight that visitors
+learned in the first five minutes. Shelves made aisles, and the aisles made a maze
+if you were new, a map if you were not. A student underlined in pencil, a visitor
+browsed, a staff member reshelved with a cart that squeaked until someone oiled
+the wheel, a small act of mercy. Light came through tall windows, not enough to
+warm, but enough to make dust visible, and dust in a library is paper and time
+and many hands, a mixture that smells like patience and a debt to the future, who
+will read the same line in a different year and feel a different jolt, which is
+the point of a book that is not a feed.
+
+=== OPINION, MEASURED ===
+Public transport deserves funding not because it is always pleasant, but because
+it moves more people in less space than private cars, and it ties a city
+together, including people who do not have other options, which is a test of
+whether a society is serious about access. A line that is late, dirty, and rare
+drives people away, so the work is both money and design, and the work does not
+end with one election cycle. Criticism without a willingness to pay for repair is
+a hobby, not a plan; the plan is a budget and a line on a map that a real
+operator can run.
+
+=== SCIENCE, PLAIN ===
+A vaccine teaches the body to recognize a pathogen so that a later meeting is less
+dangerous, like a fire drill, not a fire, though metaphors are never perfect. A
+vaccine is not a promise that no one will get sick, because biology varies, but
+it shifts the odds for an individual and for a network, which is how a population
+bends a curve, when enough people participate, and when other measures align.
+Reading one scary headline is not a full education; a conversation with a
+clinician who knows you is a better start than a long thread of strangers, when
+the stakes are your own health.
+
+A plant turns light, water, and air into matter in a way that would look like
+magic, if you had not learned the chemistry, which is not magic, but a set of
+steps, slow on our scale, fast in evolutionary time, that turned a planet green.
+When you overwater, you drown the roots, not the leaves, and the error is
+common, because the surface still looks fine for a while. A careful gardener
+checks the soil, not the myth of a rule that fits every pot.
+
+=== CLOSING ===
+This file is examples only: if you add more, keep most lines fluent and true to
+one scene or one idea, so the next token in training has a local shape worth
+learning. Replicate this file in corpus order if the model still drifts; scale
+and sleep still beat trickery in small LMs, but more good text never hurts, until
+the disk is full, and your patience is, too.
+
+END OF GENERAL ENGLISH EXAMPLES CORPUS

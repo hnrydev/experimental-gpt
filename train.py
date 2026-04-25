@@ -6,6 +6,7 @@ Environment:
   BABY_GPT_BPE=1     — BPE mode (install: pip install tokenizers)
   SAMPLE_EVERY=N     — if N>0, every N steps print a short greedy sample (local only)
   SAMPLE_PROMPT=...  — prefix for the sample (default: "The ")
+  RUN_EVAL=1         — after save, run sample_eval (fixed prompts -> outputs/eval_samples_*.txt)
 """
 
 import os
@@ -205,6 +206,16 @@ def main() -> None:
         }
     torch.save(save_obj, out)
     print(f"Saved {out} ({'BPE + .tokenizer.json' if bpe_tok else 'char'})")
+
+    if os.environ.get("RUN_EVAL", "").strip().lower() in ("1", "true", "yes"):
+        try:
+            from sample_eval import run_fixed_prompt_eval
+
+            pfile = Path(getattr(Config, "eval_prompts_file", "data/eval_prompts.txt"))
+            w = run_fixed_prompt_eval(out, prompts_path=pfile)
+            print(f"RUN_EVAL: wrote sample eval -> {w.resolve()}")
+        except Exception as e:  # pragma: no cover
+            print(f"RUN_EVAL failed (non-fatal): {e}")
 
 
 if __name__ == "__main__":

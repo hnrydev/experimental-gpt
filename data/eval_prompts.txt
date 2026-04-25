@@ -1,0 +1,17 @@
+# Fixed prompts for sample_eval.py — compare runs on grammar and sense (not loss).
+# One prompt per line. Lines starting with # are ignored. Empty lines ignored.
+
+The weather today is
+In one sentence, describe a library.
+She opened the door and
+The main reason to test software before release is
+How are you?
+The committee decided that
+Once upon a time in a small town,
+A clear paragraph should have
+The difference between correlation and causation is
+I would like to ask whether
+Scientists measured the
+The recipe calls for
+After reading the report, the team
+Between theory and practice,

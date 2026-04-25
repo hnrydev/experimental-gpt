@@ -25,13 +25,21 @@ if _fast:
         dataset = "data/input.txt"  # primary narrative/large text; still used if corpus_files is absent
         # Training order: world map, short Q&A/turns (stops the LM from *only* knowing 19c blocks),
         # then main text (Gutenberg, etc. — set by fetch_corpus or your own file).
+        # grammar_clarity + general_english appear twice to up-weight clean, fluent text vs input.txt alone.
         corpus_files = (
             "data/world_fields_primer.txt",
             "data/short_form_primer.txt",
             "data/modern_language_primer.txt",
             "data/grammar_clarity_corpus.txt",
+            "data/general_english_examples.txt",
+            "data/grammar_clarity_corpus.txt",
+            "data/general_english_examples.txt",
+            # Optional: `python scripts/fetch_wikipedia_corpus.py` (CC BY-SA 4.0). Skipped if missing.
+            "data/wikipedia_corpus.txt",
             "data/input.txt",
         )
+        # Fixed prompts for `python sample_eval.py` and optional RUN_EVAL=1 after train.
+        eval_prompts_file = "data/eval_prompts.txt"
         seed = 42
         clean_corpus = True
 
@@ -96,8 +104,13 @@ else:
             "data/short_form_primer.txt",
             "data/modern_language_primer.txt",
             "data/grammar_clarity_corpus.txt",
+            "data/general_english_examples.txt",
+            "data/grammar_clarity_corpus.txt",
+            "data/general_english_examples.txt",
+            "data/wikipedia_corpus.txt",
             "data/input.txt",
         )
+        eval_prompts_file = "data/eval_prompts.txt"
         seed = 42
         clean_corpus = True
 
