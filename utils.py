@@ -9,6 +9,7 @@ Naming:
   itos — "int to string": inverse map for decoding predictions back to text.
 """
 
+import os
 import unicodedata
 from pathlib import Path
 
@@ -115,6 +116,20 @@ def decode(ids, itos):
 def text_to_tensor(text, stoi, device="cpu"):
     """Encode text and wrap as a 1D PyTorch tensor of int64 on the given device."""
     return torch.tensor(encode(text, stoi), dtype=torch.long, device=device)
+
+
+def maybe_torch_compile(model: torch.nn.Module) -> torch.nn.Module:
+    """
+    Optional `torch.compile` (PyTorch 2+). Set BABY_GPT_COMPILE=1 for training / inference.
+    On CPU, speedup varies; safe to try on ThinkPad-class machines.
+    """
+    if os.environ.get("BABY_GPT_COMPILE", "").strip().lower() not in ("1", "true", "yes"):
+        return model
+    try:
+        return torch.compile(model)  # type: ignore[return-value, assignment]
+    except Exception as e:
+        print(f"BABY_GPT_COMPILE: torch.compile skipped ({e})")
+        return model
 
 
 if __name__ == "__main__":

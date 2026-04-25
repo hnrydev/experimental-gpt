@@ -23,7 +23,7 @@ _CKPT_NAMES = (
 from config import Config
 from local_text_fix import local_sensible_postprocess
 from model import GPT
-from utils import decode, maps_from_vocab, text_to_tensor
+from utils import decode, maps_from_vocab, maybe_torch_compile, text_to_tensor
 
 
 def clamp_prompt_to_block(prompt: str, block_size: int) -> str:
@@ -62,9 +62,9 @@ def _sampling_from_config():
 
 
 def _no_repeat_ngram_size(bpe_tok: object | None) -> int:
-    """Char: block duplicate 4-grams; BPE: duplicate 3-grams in token space (set 0 in config to disable)."""
+    """Char: block duplicate 4-grams; BPE: n-gram repeat block in token space (set 0 in config to disable)."""
     if bpe_tok is not None:
-        return int(getattr(Config, "decode_no_repeat_ngram_bpe", 3))
+        return int(getattr(Config, "decode_no_repeat_ngram_bpe", 4))
     return int(getattr(Config, "decode_no_repeat_ngram_size", 4))
 
 
@@ -111,6 +111,7 @@ def load_trained_gpt(ck_path: str | Path, device: str | None = None):
     ).to(device)
     model.load_state_dict(ck["state_dict"])
     model.eval()
+    model = maybe_torch_compile(model)
     return model, stoi, itos, bpe_tok
 
 
@@ -201,8 +202,13 @@ def generate_continuation(
         new_text = decode(all_ids[n0:], itos)
     mcr = int(getattr(Config, "local_max_char_run", 3))
     surf = bool(getattr(Config, "local_surface_english", False))
+    gram = bool(getattr(Config, "local_grammar_tweaks", True))
     new_f = local_sensible_postprocess(
-        new_text, max_same=mcr, trim_dup_tail=True, surface_english=surf
+        new_text,
+        max_same=mcr,
+        trim_dup_tail=True,
+        surface_english=surf,
+        grammar_tweaks=gram,
     )
     return prefix_text + new_f
 

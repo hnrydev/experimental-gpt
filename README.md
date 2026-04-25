@@ -10,7 +10,7 @@ pip install -r requirements.txt
 
 ## Workflow
 
-1. **Corpus:** training loads, in order, the four primers, then grammar + general-examples (each **twice** to up-weight clean text), then optional **`data/wikipedia_corpus.txt`** (skipped until you generate it; see below), then **`data/input.txt`**. Edit `Config.corpus_files` in `config.py` to add files or change order. **After changing the corpus, retrain**; an old checkpoint’s vocabulary can miss new characters.
+1. **Corpus:** training loads, in order, the four primers, then grammar + general-examples (each **three times** to up-weight clean text), then optional **`data/wikipedia_corpus.txt`** (skipped until you generate it; see below), then **`data/input.txt`**. Corpus size is in **raw characters** when you view files on disk; after BPE, the **token** count is lower (one token is often a subword, not one character). Edit `Config.corpus_files` in `config.py` to add files or change order. **After changing the corpus, retrain**; an old checkpoint’s vocabulary can miss new characters. For a full **curated + Gutenberg + Wikipedia** checklist (second wiki file, fetch commands, train/eval loop), see **`docs/DATA_AND_TRAINING_PLAN.md`**.
 2. **Train** (writes a checkpoint — path depends on profile, see below):
 
 ```bash
@@ -22,6 +22,10 @@ Quick dry run: `MAX_ITERS=100 python train.py` (PowerShell: `$env:MAX_ITERS="100
 **Train/val (generalization readout):** The last `val_fraction` of the **token** stream (default **5%** in `config.py`) is **held out**; batches use only the prefix, and the step log can show `val` and `train` loss. **Val > train** often means overfitting; **both high** means the task is still hard (underfit, tiny data, or hard distribution). Set `VAL_FRACTION=0` to disable the split. If the **tail** of the corpus is not like the head (e.g. one long section at the end), this sequential split is imperfect—more diverse text still helps more than a perfect train/val line.
 
 **Early stopping (optional, small data):** Set `EARLY_STOP_PATIENCE` to a number of **val eval intervals** (e.g. `8` with the default 50-step interval ≈ 400 steps without a val win). Training stops if val does not beat the running best (by at least `EARLY_STOP_MIN_DELTA`, default 0) that many times in a row, and the saved checkpoint is the **lowest val** so far, not the last step. Patience 0 = disabled (default).
+
+**LR schedule:** Training uses **cosine decay** to `min_learning_rate` in `config.py`, plus (by default) a **linear warmup** for `lr_warmup_iters` steps. Set `lr_warmup_iters = 0` in config or `LR_WARMUP_ITERS=0` in the environment for **pure cosine** (no ramp).
+
+**Optional CPU / speed:** `BABY_GPT_NUM_THREADS=4` caps PyTorch/BLAS thread count (tune to your core count). `BABY_GPT_COMPILE=1` turns on `torch.compile` (PyTorch 2+; first step can be slow; try on training and on `chat.py` / `generate.py` via the same env when loading a checkpoint).
 
 ### Qualitative eval (grammar, sensible text)
 
@@ -42,7 +46,7 @@ $env:RUN_EVAL="1"; python train.py
 
 ### Best “communication” without an API (recommended)
 
-**BPE (ByteLevel, trained on your corpus, fully local)** predicts **subword** tokens, not raw characters—usually the largest quality jump you can get from this repo alone. It uses a **different checkpoint** (`models/baby_gpt_fast_bpe.pt` in the fast profile) and a sidecar `*.tokenizer.json` next to it. Longer default run (3000 fast steps) and larger `block_size` in **token** space are set in `config.py` when BPE is on.
+**BPE (ByteLevel, trained on your corpus, fully local)** predicts **subword** tokens, not raw characters—usually the largest quality jump you can get from this repo alone. It uses a **different checkpoint** (`models/baby_gpt_fast_bpe.pt` in the fast profile) and a sidecar `*.tokenizer.json` next to it. Fast mode uses `bpe_vocab_size` **4096** in `config.py` (increase for richer subwords; **retrain** after you change it — the tokenizer and `bpe_vocab_size` in the checkpoint must match). Longer default run (3000 fast steps) and larger `block_size` in **token** space are set in `config.py` when BPE is on.
 
 ```powershell
 $env:BABY_GPT_FAST="1"

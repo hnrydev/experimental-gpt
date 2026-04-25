@@ -10,6 +10,9 @@ Environment:
   VAL_FRACTION=0     — disable train/val split (else uses Config.val_fraction, last slice = val)
   EARLY_STOP_PATIENCE=0  — with val, stop after this many val evals without val improvement; 0 = off
   EARLY_STOP_MIN_DELTA=0  — new val best only if l_va drops by this much
+  LR_WARMUP_ITERS   — override linear ramp before cosine (0 = no warmup; default from Config)
+  BABY_GPT_NUM_THREADS  — e.g. 4 to cap CPU BLAS/OMP threads (ThinkPad)
+  BABY_GPT_COMPILE=1  — torch.compile the model (PyTorch 2+; may speed CPU train/infer)
 """
 
 import os
@@ -19,7 +22,7 @@ from pathlib import Path
 import torch
 from config import Config
 from model import GPT
-from utils import create_vocab, load_text, text_to_tensor
+from utils import create_vocab, load_text, maybe_torch_compile, text_to_tensor
 
 torch.manual_seed(Config.seed)
 random.seed(Config.seed)
@@ -102,7 +105,23 @@ def _print_train_sample(
         print(f"  [sample @ {step}] (skip) {e}")
 
 
+def _maybe_set_cpu_threads() -> None:
+    raw = os.environ.get("BABY_GPT_NUM_THREADS", "").strip()
+    if not raw:
+        return
+    try:
+        n = int(raw)
+    except ValueError:
+        return
+    if n < 1:
+        return
+    before = torch.get_num_threads()
+    torch.set_num_threads(n)
+    print(f"BABY_GPT_NUM_THREADS: OpenMP/BLAS threads {before} -> {n}")
+
+
 def main() -> None:
+    _maybe_set_cpu_threads()
     text = load_text()
 
     bpe_tok = None
@@ -114,17 +133,28 @@ def main() -> None:
         except ImportError as e:
             raise SystemExit("BABY_GPT_BPE=1 needs: pip install tokenizers (see requirements.txt).") from e
         out_ck = Path(Config.checkpoint)
-        print("Training BPE tokenizer (local, once per run)...")
+        n_char = len(text)
+        print(
+            f"Training BPE tokenizer (local, once per run) on {n_char:,} characters...",
+            flush=True,
+        )
         bpe_tok = train_bpe_tokenizer(
             text,
             vocab_size=int(getattr(Config, "bpe_vocab_size", 2048)),
         )
         tok_path = save_bpe_tokenizer(bpe_tok, out_ck)
         n_vocab = bpe_tok.get_vocab_size()
-        print(f"BPE vocabulary size: {n_vocab} | {tok_path.name}")
+        print(f"BPE vocabulary size: {n_vocab} | {tok_path.name}", flush=True)
         all_ids: list[int] = []
-        for i in range(0, len(text), 1_000_000):
-            all_ids.extend(encode_to_ids(bpe_tok, text[i : i + 1_000_000]))
+        step = 1_000_000
+        n_chunks = (n_char + step - 1) // step
+        for ci, i in enumerate(range(0, n_char, step)):
+            print(
+                f"  BPE encode chunk {ci + 1}/{n_chunks} (chars {i:,}…{min(i + step, n_char):,})",
+                flush=True,
+            )
+            all_ids.extend(encode_to_ids(bpe_tok, text[i : i + step]))
+        print("  Building token tensor on device…", flush=True)
         data = torch.tensor(all_ids, dtype=torch.long, device=Config.device)
         vocab_size = n_vocab
         stoi, itos = None, None
@@ -178,15 +208,37 @@ def main() -> None:
         dropout=Config.dropout,
     )
     model = model.to(Config.device)
+    model = maybe_torch_compile(model)
 
     opt = torch.optim.AdamW(
         model.parameters(), lr=Config.learning_rate, weight_decay=Config.weight_decay
     )
     max_iters = int(os.environ.get("MAX_ITERS", str(Config.max_iters)))
     eta_min = float(getattr(Config, "min_learning_rate", 1e-5))
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-        opt, T_max=max_iters, eta_min=eta_min
+    warm = int(
+        float(
+            (os.environ.get("LR_WARMUP_ITERS", str(getattr(Config, "lr_warmup_iters", 0)))).strip()
+        )
     )
+    warm = max(0, min(warm, max(0, max_iters - 1)))
+    if warm > 0 and max_iters - warm > 0:
+        wsched = torch.optim.lr_scheduler.LinearLR(
+            opt, start_factor=0.1, end_factor=1.0, total_iters=warm
+        )
+        csched = torch.optim.lr_scheduler.CosineAnnealingLR(
+            opt, T_max=max_iters - warm, eta_min=eta_min
+        )
+        scheduler = torch.optim.lr_scheduler.SequentialLR(
+            opt, [wsched, csched], milestones=[warm]
+        )
+        print(
+            f"LR schedule: linear warmup {warm} iters, then cosine (T_max={max_iters - warm} -> {eta_min:g})"
+        )
+    else:
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            opt, T_max=max_iters, eta_min=eta_min
+        )
+        print(f"LR schedule: cosine to {eta_min:g} (T_max={max_iters}, no warmup)")
     sample_every = int(os.environ.get("SAMPLE_EVERY", "0").strip() or 0)
     sample_prompt = os.environ.get("SAMPLE_PROMPT", "The ")
 

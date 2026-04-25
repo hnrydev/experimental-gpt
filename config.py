@@ -18,14 +18,14 @@ if _fast:
         """Small model + shorter context: many steps per minute on a typical laptop CPU."""
 
         use_bpe = _use_bpe
-        bpe_vocab_size = 2048
+        bpe_vocab_size = 4096
         # Subword (BPE) in *token* space: larger `block_size` in tokens, separate checkpoint
         # so char runs are not broken. Set BABY_GPT_BPE=1; requires: pip install tokenizers
         checkpoint = "models/baby_gpt_fast_bpe.pt" if _use_bpe else "models/baby_gpt_fast.pt"
         dataset = "data/input.txt"  # primary narrative/large text; still used if corpus_files is absent
         # Training order: world map, short Q&A/turns (stops the LM from *only* knowing 19c blocks),
         # then main text (Gutenberg, etc. — set by fetch_corpus or your own file).
-        # grammar_clarity + general_english appear twice to up-weight clean, fluent text vs input.txt alone.
+        # grammar_clarity + general_english three times: up-weight clean, fluent text vs input.txt alone.
         corpus_files = (
             "data/world_fields_primer.txt",
             "data/short_form_primer.txt",
@@ -34,8 +34,12 @@ if _fast:
             "data/general_english_examples.txt",
             "data/grammar_clarity_corpus.txt",
             "data/general_english_examples.txt",
+            "data/grammar_clarity_corpus.txt",
+            "data/general_english_examples.txt",
             # Optional: `python scripts/fetch_wikipedia_corpus.py` (CC BY-SA 4.0). Skipped if missing.
             "data/wikipedia_corpus.txt",
+            # Optional: `python scripts/fetch_wikipedia_corpus.py --mode en --out data/wikipedia_en_corpus.txt`
+            "data/wikipedia_en_corpus.txt",
             "data/input.txt",
         )
         # Fixed prompts for `python sample_eval.py` and optional RUN_EVAL=1 after train.
@@ -50,6 +54,8 @@ if _fast:
         eval_interval = 50
         eval_batches = 15
         learning_rate = 3e-4
+        # Linear ramp then cosine to min_learning_rate (0 = skip warmup, pure cosine in train.py).
+        lr_warmup_iters = 200
         min_learning_rate = 1e-5
         weight_decay = 0.1
 
@@ -71,6 +77,8 @@ if _fast:
         local_max_char_run = 3
         # Cosmetic only: spaces, word "i" -> "I", cap after . ! ? — not grammar repair
         local_surface_english = True
+        # Tiny regex in local_text_fix (a/an, he go → he goes) — not a real grammar engine
+        local_grammar_tweaks = True
         # Chat only: suffix + looser sampling so the model is less likely to copy your line verbatim
         chat_prompt_suffix = "\n"
         # Chat decoding: stricter = less gibberish on small LMs (boring is OK; “creative” = noisy).
@@ -117,7 +125,10 @@ else:
             "data/general_english_examples.txt",
             "data/grammar_clarity_corpus.txt",
             "data/general_english_examples.txt",
+            "data/grammar_clarity_corpus.txt",
+            "data/general_english_examples.txt",
             "data/wikipedia_corpus.txt",
+            "data/wikipedia_en_corpus.txt",
             "data/input.txt",
         )
         eval_prompts_file = "data/eval_prompts.txt"
@@ -130,6 +141,7 @@ else:
         eval_interval = 800
         eval_batches = 30
         learning_rate = 2e-4
+        lr_warmup_iters = 1000
         min_learning_rate = 1e-5
         weight_decay = 0.1
 
@@ -148,6 +160,7 @@ else:
         decode_no_repeat_ngram_bpe = 4
         local_max_char_run = 3
         local_surface_english = True
+        local_grammar_tweaks = True
         chat_prompt_suffix = "\n"
         chat_temperature = 0.50
         chat_top_p = 0.80

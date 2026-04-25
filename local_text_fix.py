@@ -89,6 +89,50 @@ def trim_consecutive_duplicate_tail(s: str, min_unit: int = 10) -> str:
     return out
 
 
+def light_regex_grammar_fixes(s: str) -> str:
+    """
+    High-precision string fixes (not a parser). Fixes a few common LM glitches:
+    wrong “a/an” before a small set of vowel-initial words, “he go” → “he goes”, “they goes” → “they go”.
+    """
+    if not s:
+        return s
+    # “a apple” → “an apple” (small word list; “a university” stays — /juː/ sound)
+    _an_words = (
+        "apple",
+        "egg",
+        "orange",
+        "umbrella",
+        "island",
+        "owl",
+        "eagle",
+        "ice",
+        "idea",
+        "hour",
+        "honest",
+        "honor",
+        "octopus",
+        "elephant",
+        "actor",
+        "artist",
+        "angel",
+        "arrow",
+        "echo",
+        "entry",
+        "exit",
+        "oven",
+    )
+    alt = "|".join(re.escape(w) for w in _an_words)
+
+    def _a_to_an(m) -> str:
+        art, w = m.group(1), m.group(2)
+        return ("An " if art == "A" else "an ") + w
+
+    s = re.sub(rf"\b([Aa]) ({alt})\b", _a_to_an, s, flags=re.IGNORECASE)
+    s = re.sub(r"\b(he|she|it) go\b", lambda m: f"{m.group(1)} goes", s, flags=re.IGNORECASE)
+    s = re.sub(r"\bthey goes\b", "they go", s, flags=re.IGNORECASE)
+    return s
+
+
 def light_surface_english(s: str) -> str:
     """
     Cheap cosmetic passes that look a bit more like typed English.
@@ -125,10 +169,13 @@ def local_sensible_postprocess(
     max_same: int = 3,
     trim_dup_tail: bool = True,
     surface_english: bool = False,
+    grammar_tweaks: bool = True,
 ) -> str:
     """Apply all local heuristics (no network)."""
     s = collapse_excessive_repeats(s, max_same=max_same)
     s = collapse_repeating_substring_runs(s, min_unit=2, max_unit=6)
+    if grammar_tweaks:
+        s = light_regex_grammar_fixes(s)
     s = collapse_punctuation_runs(s)
     if trim_dup_tail:
         s = trim_consecutive_duplicate_tail(s, min_unit=10)
