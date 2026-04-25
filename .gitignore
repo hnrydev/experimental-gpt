@@ -10,3 +10,4 @@ outputs/*
 .pytest_cache/
 .coverage
 htmlcov/
+*.bak

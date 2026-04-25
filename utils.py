@@ -1,19 +1,63 @@
-"""Load text, char-level vocabulary, encode/decode."""
+"""
+Data helpers for a character-level language model.
+
+The network never sees raw letters — only integers (token ids). These helpers
+bridge text ↔ ids so training and generation stay simple and explicit.
+
+Naming:
+  stoi — "string to int": map each character → id (0 .. vocab_size-1).
+  itos — "int to string": inverse map for decoding predictions back to text.
+"""
+
+import unicodedata
 
 import torch
 
 from config import Config
 
 
-def load_text():
+def clean_text(s: str) -> str:
+    """
+    Normalize Unicode, line endings, and noisy whitespace.
+
+    Does not remove real words — it makes the character stream more consistent
+    so the model sees slightly cleaner "grammar of spacing" (paragraph breaks,
+    no weird control bytes from PDF copy-paste).
+    """
+    s = unicodedata.normalize("NFKC", s)
+    s = s.replace("\r\n", "\n").replace("\r", "\n")
+    out = []
+    for ch in s:
+        o = ord(ch)
+        if ch in "\n\t" or o >= 32:
+            out.append(ch)
+    s = "".join(out)
+    while "\n\n\n\n" in s:
+        s = s.replace("\n\n\n\n", "\n\n\n")
+    return s.strip() + ("\n" if s.strip() else "")
+
+
+def load_text(clean: bool | None = None):
+    """Read the whole corpus from disk as one Python string."""
+    if clean is None:
+        clean = getattr(Config, "clean_corpus", True)
     with open(Config.dataset, "r", encoding="utf-8") as f:
         text = f.read()
-    print(f"Loaded {len(text)} characters from {Config.dataset}")
+    if clean:
+        text = clean_text(text)
+    print(f"Loaded {len(text):,} characters from {Config.dataset}" + (" (cleaned)" if clean else ""))
     return text
 
 
 def create_vocab(text):
-    """Return vocab size, stoi, itos (chars are sorted unique)."""
+    """
+    Build the character vocabulary from the corpus.
+
+    We take every *unique* character that appears, sort them (stable, reproducible
+    ordering), and assign ids 0,1,2,... That fixed order becomes our "alphabet"
+    for this run. We also return `vocab` as a single string (same order as ids)
+    so checkpoints can save and reload the mapping without pickle quirks.
+    """
     chars = sorted(set(text))
     vocab = "".join(chars)
     stoi = {ch: i for i, ch in enumerate(chars)}
@@ -24,21 +68,28 @@ def create_vocab(text):
 
 
 def maps_from_vocab(vocab: str):
-    """Rebuild stoi/itos from a saved vocabulary string (index order = id)."""
+    """
+    Rebuild stoi/itos from the vocabulary string stored in a checkpoint.
+
+    `vocab[i]` must be the character with id `i` — same convention as create_vocab.
+    """
     stoi = {ch: i for i, ch in enumerate(vocab)}
     itos = {i: ch for i, ch in enumerate(vocab)}
     return len(vocab), stoi, itos
 
 
 def encode(text, stoi):
+    """Turn a string into a list of integer token ids (for feeding the model)."""
     return [stoi[ch] for ch in text]
 
 
 def decode(ids, itos):
+    """Turn a list of token ids back into a string (for reading model output)."""
     return "".join(itos[i] for i in ids)
 
 
 def text_to_tensor(text, stoi, device="cpu"):
+    """Encode text and wrap as a 1D PyTorch tensor of int64 on the given device."""
     return torch.tensor(encode(text, stoi), dtype=torch.long, device=device)
 
 
