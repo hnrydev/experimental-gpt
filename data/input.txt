@@ -1,0 +1,58 @@
+Section zero. Why this file exists. A small language model reads characters left to right in a window. It tries to guess the very next character. There is no magic inside the weights; there is only pattern, repetition, and enough examples that the rules start to show up in the numbers. Good training text is not one trick repeated forever. It is many habits mixed together: short sentences, long sentences, questions, answers, names, numbers, times, places, mistakes corrected, lists that start and lists that end.
+
+Part one. Voice. I wrote this myself so you can train without worrying about licenses. You may delete every word and paste your own diary if you want; the script does not care about meaning. It cares about statistics. Still, if you keep this file, you give the model a little bit of context about how English can move: sometimes plain, sometimes playful, sometimes like notes taken during a slow afternoon.
+
+Part two. Numbers and times. The bus was late by eleven minutes. The recipe said preheat to 350 F. She woke at 6:05 and left before 7:00. Version 2.1 was better than 1.9 for our tests. You can write 100 percent or 100% and the model will learn both if both appear. Count: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10. Bigger: 2024, 2025, 2026. Smaller: 0.01, 0.5, 1.0, 2.25, 3.14159 (only an approximation, do not use this file for your math final).
+
+Part three. Punctuation as music. A single word can end with a period. A question can end with a question mark? An exclamation is rare and should be earned! Ellipses can slow a thought down... Dashes can add a side thought like this - quick and light - and parentheses can hold an aside (if you are patient). Commas, however, are the workhorses: they separate, they pause, they keep lists from colliding, and they help long sentences stay readable, even when the ideas stack up, one after another, without turning into a wall.
+
+Part four. Quotes and dialogue. "Are you sure?" he asked. "Mostly," she said. "Mostly is not a plan," he replied, but he smiled. 'Single quotes' can show up in some styles, so they show up here too. The model will see that opening and closing marks often come in pairs, and that a new line sometimes follows a quote.
+
+Mara looked at the map. "We can go by the river."
+"Or we can go by the road," said Jon. "The road is faster."
+"Fast is not the same as good," Mara said, folding the map too small.
+Jon laughed. "Then we go by the river. But you buy the coffee tomorrow."
+
+Part five. Lists. What to pack for a short trip:
+- a light coat
+- a phone charger
+- a small notebook
+- a water bottle
+- one good idea you have not written down yet
+What to avoid:
+- shoes that only look good
+- overpacking for every possible disaster
+- checking the weather app every four minutes
+When the list ends, return to normal paragraphs. That change in shape is useful context for a model that only sees characters.
+
+Part six. Contrast. Some sentences are tiny. Some sentences are not tiny at all; they carry a second half that explains the first half, because readers like to know why, and the why can ride along in the same breath if you are careful and if you do not get lost in the middle. Short. Then medium. Then a long one with clauses (like this) and a final stop.
+
+Part seven. Repetition on purpose. The word "step" can repeat. Step one: start. Step two: keep going. Step three: check your work. Step four: rest. The word "train" can repeat. You train a model. You train your attention. A train is also a machine on rails, and the model will need context to know which "train" you mean. In this file, most uses are the verb or the learning noun, not the vehicle.
+
+Part eight. Questions as training signal. What happens if the data is too small? The model copies and babbles. What happens if the data is cleaner but still short? The model may learn spelling and then invent odd phrases. What helps? More text, more variety, and patience. Can a tiny model be fun anyway? Yes. Is it a person? No. Will it still surprise you? Sometimes, and that is part of the point.
+
+Part nine. A tiny story, original, not for the world, only for patterns. The shop on the corner sold paper, tape, and envelopes. The owner, Eli, had a rule: no questions before coffee. A child came in with three dollars and a serious face. "I need an envelope that can hold a letter to the moon," the child said. Eli poured coffee, then said, "The moon is far. You will need strong tape." The child nodded. They picked a blue envelope. On the way out, the child whispered, "It is not really for the moon. It is for my sister." Eli pretended not to hear. The bell on the door rang like a small star.
+
+Part ten. Nonfiction voice. Water boils at 100 C at sea level, if you use metric, and the details change with altitude, but a language model is not a lab instrument. A language model is a next-token engine trained on text. It can sound confident and still be wrong. Always check facts that matter. Training data is not truth; it is a mirror with smudges.
+
+Part eleven. Science tone, still plain. A hypothesis is a guess you can test. An experiment changes one thing at a time, if you can. A result might be boring; boring is still information. A model's loss curve can go down smoothly, or it can wiggle, or it can look fine and still produce weird samples. That is why we look with our eyes, not only with one number at the end.
+
+Part twelve. Work and rest. You can train for many iterations. You can also stop early and look at output, then change the data, then train again. The loop is: read, change, run, look, decide. The loop is not: run once, trust forever. Small projects stay small on purpose. Small does not mean useless. Small means you can understand the pieces.
+
+Part thirteen. Code-shaped lines as plain text, not as code, because this file is text. Example line: def train(): return "not real code". Example line: x = y + 1. Example line: # this is a comment in many languages. The model can learn the skin of code even if it never executes here. If you want real code in the mix, paste a small file you have permission to use. Mixing registers helps if you want the model to echo that style later.
+
+Part fourteen. Names and places. Nadia, Omar, Keiko, and Sam all fit in one line. The river named in part four is imaginary. The shop is imaginary. If you add your own city, your own street, your own friends' names, be careful with privacy. A model can regurgitate what it has seen. For toy projects, invent names, or use public domain lists, or use your own words and keep the file local.
+
+Part fifteen. Errors and fixes. This sentence has a tpyo in it you may notice. In real clean datasets you remove typos. In small toy datasets, a few typos can teach robustness, or they can teach mistakes. You choose. I will fix the word now: typo. If you want strict spelling, search and replace before training. If you want chatty human text, leave a little mess.
+
+Part sixteen. Rhythm. One. Two. Three. Now a longer line with commas, then a stop. Now a fragment. And again. The model does not know rhythm as music, but it can learn what usually comes after a period, and what usually comes after a colon: often a list, or an explanation, or a small surprise.
+
+Part seventeen. Transitions. First, we collect text. Next, we turn characters into numbers. Then we sample windows. After that, we update weights. Finally, we read output and decide if the model is learning the skin of the data or the soul of the data. In toy settings, the skin is enough. In real settings, you add evaluation, tools, and care.
+
+Part eighteen. Weather and tone. The wind came from the west. The morning was cold, but the afternoon turned warm, and the sky looked honest. That is a silly way to say "clear," but the model can learn that adjectives travel in pairs. Hot and dry. Dark and quiet. Slow and sure.
+
+Part nineteen. A contract with the reader. I will not promise poetry. I will not promise perfect facts. I will promise variety, length, and enough local repetition that a small transformer can get a grip. I will promise you can replace this with your own novel, your own chat logs, your own notes, and the pipeline will still run. The file is a starting point, not a destination.
+
+Part twenty. The last paragraph before you go train. If you read this far, you have seen section headers, dialogue, lists, questions, numbers, a story, a warning, a promise, a few styles mixed, and a calm voice that still changes speed. That is the kind of mix a character-level model can use as context: not one voice, not one task, not one pattern forever. Save the file, run training, look at loss, sample text, and then change the data again. Machine learning is a craft. The text is the wood. The model is the tool. The loop is the shop. Build something small, learn how it moves, and then build the next thing with a little more intent.
+
+The end. (For now.)
