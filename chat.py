@@ -42,37 +42,38 @@ def _format_continuation(suffix: str) -> str:
 
 
 def _resolve_chat_sampling(args, coherent: bool):
-    """Defaults: normal chat vs --coherent (tighter, less pseudo-word garbage on small LMs)."""
+    """Defaults are strict for small LMs; use --looser to widen sampling; --coherent is stricter still."""
     c = Config
+    cap = int(getattr(c, "chat_safety_max_new", 200))
     if coherent:
-        base_t = getattr(c, "chat_coherent_temperature", 0.58)
-        base_p = getattr(c, "chat_coherent_top_p", 0.86)
-        base_k = getattr(c, "chat_coherent_top_k", 20)
-        base_r = getattr(c, "chat_coherent_repetition_penalty", 1.48)
-        base_max = getattr(c, "chat_coherent_max_new", 200)
+        base_t = getattr(c, "chat_coherent_temperature", 0.45)
+        base_p = getattr(c, "chat_coherent_top_p", 0.78)
+        base_k = getattr(c, "chat_coherent_top_k", 12)
+        base_r = getattr(c, "chat_coherent_repetition_penalty", 1.6)
+        base_max = int(getattr(c, "chat_coherent_max_new", 120))
     else:
         base_t = getattr(c, "chat_temperature", c.temperature)
         base_p = getattr(c, "chat_top_p", c.top_p)
-        base_k = None  # use generate.py default = Config.top_k
+        # Finite top-k reduces junk tokens vs leaving None (full generate default top_k).
+        base_k = int(getattr(c, "chat_top_k", 16))
         base_r = getattr(c, "chat_repetition_penalty", c.repetition_penalty)
-        # Shorter default reply limits runaway loops on small LMs
-        cap = int(getattr(c, "chat_safety_max_new", 200))
+        # Always cap by chat_safety_max_new to limit runaway gibberish
         base_max = min(int(c.max_new_tokens), cap)
+    if args.looser:
+        base_t = min(base_t + 0.2, 1.0)
+        base_p = min(base_p + 0.1, 0.95)
+        base_k = min(int(base_k * 1.4) + 4, 48)
     temp = base_t if args.temperature is None else args.temperature
     top_p = base_p if args.top_p is None else args.top_p
     if args.top_k is not None:
         top_k = args.top_k
-    elif coherent:
-        top_k = base_k
     else:
-        top_k = None
+        top_k = base_k
     rep = base_r if args.repetition_penalty is None else args.repetition_penalty
     if args.max_new is not None:
         max_new = args.max_new
-    elif coherent:
-        max_new = base_max
     else:
-        max_new = c.max_new_tokens
+        max_new = base_max
     return max_new, temp, top_p, top_k, rep
 
 
@@ -96,6 +97,11 @@ def main():
         action="store_true",
         help="Argmax decoding (no randomness). Often less pseudo-word noise than sampling; "
         "can repeat; --coherent is ignored for decoding when this is set.",
+    )
+    p.add_argument(
+        "--looser",
+        action="store_true",
+        help="Nudge sampling toward higher temp / top_p / top_k (more random, often messier on tiny LMs).",
     )
     p.add_argument("--temperature", type=float, default=None, help="Override chat_temperature")
     p.add_argument("--top-k", type=int, default=None, help="Top-k (default: config)")
@@ -126,11 +132,15 @@ def main():
     if args.greedy:
         print(f"Mode: --greedy (argmax each next {_tok}; no sampling — still not a chat model).\n")
     elif args.coherent:
-        print("Mode: --coherent (tighter sampling; use with more training for best text).\n")
+        print("Mode: --coherent (strictest sampling; best match for a small continuation LM).\n")
+    elif args.looser:
+        print("Mode: --looser (wider sampling — you asked for it).\n")
     else:
+        print("Default: strict chat decoding (see config: chat_*, top_k) — not a real chat model.\n")
+    if not (args.greedy or args.looser) and not args.coherent:
         print(
-            "Tip: try `python chat.py --greedy` or `--coherent`, and train longer "
-            "(e.g. $env:MAX_ITERS=\"5000\" with BABY_GPT_FAST=1).\n"
+            "Stricter: `python chat.py --coherent`  |  Even less noise: `python chat.py --greedy`  |  "
+            "More variety (messier): `python chat.py --looser`  |  train longer: MAX_ITERS=5000+ .\n"
         )
     print(
         "This is a *text continuation* model (not chat-tuned), trained on text — not a yes/no assistant.\n"

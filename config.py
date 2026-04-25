@@ -66,27 +66,37 @@ if _fast:
         repetition_context_len = 24
         # N-gram blocking in `model.generate` (0 = off). Tames loops like Cycycy / token stutter.
         decode_no_repeat_ngram_size = 4
-        decode_no_repeat_ngram_bpe = 3
+        decode_no_repeat_ngram_bpe = 4
         # Local collapse of char runs — always on in generate.py (see local_text_fix.py)
         local_max_char_run = 3
         # Cosmetic only: spaces, word "i" -> "I", cap after . ! ? — not grammar repair
         local_surface_english = True
         # Chat only: suffix + looser sampling so the model is less likely to copy your line verbatim
         chat_prompt_suffix = "\n"
-        # Tighter chat decoding to reduce collapse / verbatim copy (tune in config, not a chat model).
-        chat_temperature = 0.64
-        chat_top_p = 0.9
-        chat_repetition_penalty = 1.62
-        chat_repetition_context_len = 48
-        chat_safety_max_new = 200
-        # Tighter sampling for `python chat.py --coherent` (less “creative” garbage).
-        chat_coherent_temperature = 0.55
-        chat_coherent_top_p = 0.85
-        chat_coherent_top_k = 20
-        chat_coherent_repetition_penalty = 1.55
-        chat_coherent_max_new = 200
-        # Shorter default for `chat.py --greedy` (argmax can loop or ramble in long runs).
-        chat_greedy_max_new = 180
+        # Chat decoding: stricter = less gibberish on small LMs (boring is OK; “creative” = noisy).
+        chat_temperature = 0.48
+        chat_top_p = 0.78
+        # Used as default top-k in chat (not None); cap candidate tokens each step.
+        chat_top_k = 16
+        chat_repetition_penalty = 1.75
+        chat_repetition_context_len = 56
+        chat_safety_max_new = 100
+        # `python chat.py --coherent` — even stricter; best for “readable” at tiny scale.
+        chat_coherent_temperature = 0.40
+        chat_coherent_top_p = 0.72
+        chat_coherent_top_k = 12
+        chat_coherent_repetition_penalty = 1.70
+        chat_coherent_max_new = 100
+        # Shorter: greedy argmax can loop if max_new is large.
+        chat_greedy_max_new = 100
+        # Held-out % of *token* sequence for val loss in train.py (0 = use full data for both).
+        # A gap (train < val) suggests overfitting; val ≫ train on tiny data is noisy. Tune regularization.
+        val_fraction = 0.05
+        # 0 = off. If >0 with a val split: stop after this many *eval* intervals in a row without val
+        # improvement; the saved weights are the best val seen (not necessarily the last step).
+        # Override: EARLY_STOP_PATIENCE / EARLY_STOP_MIN_DELTA.
+        early_stop_patience = 0
+        early_stop_min_delta = 0.0
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -135,20 +145,24 @@ else:
         repetition_penalty = 1.22
         repetition_context_len = 24
         decode_no_repeat_ngram_size = 4
-        decode_no_repeat_ngram_bpe = 3
+        decode_no_repeat_ngram_bpe = 4
         local_max_char_run = 3
         local_surface_english = True
         chat_prompt_suffix = "\n"
-        chat_temperature = 0.64
-        chat_top_p = 0.9
-        chat_repetition_penalty = 1.62
-        chat_repetition_context_len = 48
-        chat_safety_max_new = 220
-        chat_coherent_temperature = 0.55
-        chat_coherent_top_p = 0.85
-        chat_coherent_top_k = 20
-        chat_coherent_repetition_penalty = 1.55
-        chat_coherent_max_new = 220
-        chat_greedy_max_new = 200
+        chat_temperature = 0.50
+        chat_top_p = 0.80
+        chat_top_k = 18
+        chat_repetition_penalty = 1.72
+        chat_repetition_context_len = 56
+        chat_safety_max_new = 120
+        chat_coherent_temperature = 0.42
+        chat_coherent_top_p = 0.75
+        chat_coherent_top_k = 12
+        chat_coherent_repetition_penalty = 1.68
+        chat_coherent_max_new = 120
+        chat_greedy_max_new = 120
+        val_fraction = 0.05
+        early_stop_patience = 0
+        early_stop_min_delta = 0.0
 
         device = "cuda" if torch.cuda.is_available() else "cpu"

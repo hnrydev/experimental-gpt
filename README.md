@@ -19,6 +19,10 @@ python train.py
 
 Quick dry run: `MAX_ITERS=100 python train.py` (PowerShell: `$env:MAX_ITERS="100"; python train.py`).
 
+**Train/val (generalization readout):** The last `val_fraction` of the **token** stream (default **5%** in `config.py`) is **held out**; batches use only the prefix, and the step log can show `val` and `train` loss. **Val > train** often means overfitting; **both high** means the task is still hard (underfit, tiny data, or hard distribution). Set `VAL_FRACTION=0` to disable the split. If the **tail** of the corpus is not like the head (e.g. one long section at the end), this sequential split is imperfect—more diverse text still helps more than a perfect train/val line.
+
+**Early stopping (optional, small data):** Set `EARLY_STOP_PATIENCE` to a number of **val eval intervals** (e.g. `8` with the default 50-step interval ≈ 400 steps without a val win). Training stops if val does not beat the running best (by at least `EARLY_STOP_MIN_DELTA`, default 0) that many times in a row, and the saved checkpoint is the **lowest val** so far, not the last step. Patience 0 = disabled (default).
+
 ### Qualitative eval (grammar, sensible text)
 
 Val loss is not enough to compare runs if your goal is **readable** output. This repo includes **`data/eval_prompts.txt`** (one prompt per line; `#` comments allowed) and **`sample_eval.py`**, which writes continuations to **`outputs/eval_samples_*.txt`** using the same “coherent”-style decoding as `chat.py --coherent` by default (tighter sampling for stability).
@@ -76,7 +80,7 @@ python chat.py
 
 Or explicitly: `python chat.py --checkpoint models/baby_gpt_fast.pt`
 
-**Refining output (what actually helps):** (1) **`BABY_GPT_BPE=1` + retrain** — subword tokens (see above). (2) **Train longer** while loss falls (override `MAX_ITERS`). (3) **`python chat.py --greedy` / `--coherent`** — decoding only. (4) **Bigger / non–fast** model and overnight runs if you can. **Reality check:** this is still a **base LM** (continuation), not a full chat or instruction system; BPE + scale gets you **closer to legible text**, not human-level dialogue.
+**Refining output (what actually helps):** (1) **`BABY_GPT_BPE=1` + retrain** — subword tokens (see above). (2) **Train longer** while loss falls (override `MAX_ITERS`). (3) **Chat defaults are strict** (low temp, top-*p*/*k*, short `max_new`, high repetition penalty — see `config.py` `chat_*`); use **`--coherent`** for strictest, **`--greedy`** for argmax, **`--looser`** if you want wider sampling. (4) **Bigger / non–fast** model and overnight runs if you can. **Reality check:** this is still a **base LM** (continuation), not a full chat or instruction system; decoding can only reduce noise, not install understanding.
 
 **Sensible text without a paid API:** after sampling, `local_text_fix` runs on the **new continuation only** (not your prompt), so the chat UI can strip the prefix correctly — otherwise sentence-capitalization on the full string could break prefix matching and look like an “echo.” It **caps** insane repeats, trims `?!.` / newlines, optional **tail dedupe**, and optional **`light_surface_english`** on the new part only. **Decoding** uses **top-k**, **nucleus (top-p)**, and **repetition penalty** (`config.py`); chat defaults are tuned a bit to reduce copying your line verbatim.
 

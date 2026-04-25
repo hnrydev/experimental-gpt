@@ -7,6 +7,9 @@ Environment:
   SAMPLE_EVERY=N     — if N>0, every N steps print a short greedy sample (local only)
   SAMPLE_PROMPT=...  — prefix for the sample (default: "The ")
   RUN_EVAL=1         — after save, run sample_eval (fixed prompts -> outputs/eval_samples_*.txt)
+  VAL_FRACTION=0     — disable train/val split (else uses Config.val_fraction, last slice = val)
+  EARLY_STOP_PATIENCE=0  — with val, stop after this many val evals without val improvement; 0 = off
+  EARLY_STOP_MIN_DELTA=0  — new val best only if l_va drops by this much
 """
 
 import os
@@ -76,7 +79,7 @@ def _print_train_sample(
             t = [stoi[c] for c in p]
             idx = torch.tensor(t, dtype=torch.long, device=device).view(1, -1)
         rdef = _sampling_from_config()
-        nrg = int(getattr(Config, "decode_no_repeat_ngram_bpe", 3)) if bpe is not None else int(
+        nrg = int(getattr(Config, "decode_no_repeat_ngram_bpe", 4)) if bpe is not None else int(
             getattr(Config, "decode_no_repeat_ngram_size", 4)
         )
         out = model.generate(
@@ -134,8 +137,37 @@ def main() -> None:
         data = text_to_tensor(text, stoi, device=Config.device)
 
     n_tok = data.shape[0]
-    n_starts = n_tok - Config.block_size
-    print(f"Tokenized length: {n_tok:,} | start positions: {n_starts:,} | mode: {'BPE' if bpe_tok else 'char'}")
+    b = int(Config.block_size)
+    val_fr = float(os.environ.get("VAL_FRACTION", str(getattr(Config, "val_fraction", 0.0))))
+    if val_fr > 0.001 and n_tok * val_fr > b * 2 + 2000:
+        n_tr = int(n_tok * (1.0 - val_fr))
+        n_tr = max(n_tr, b + Config.batch_size + 2)
+        if n_tok - n_tr <= b + 2:
+            train_data, val_data = data, data
+            use_val = False
+            print("Corpus: val split skipped (tail too short after cut).")
+        else:
+            train_data = data[:n_tr].contiguous()
+            val_data = data[n_tr:].contiguous()
+            use_val = True
+            print(
+                f"Train/val split: {n_tr:,} train / {n_tok - n_tr:,} val tokens "
+                f"(~{val_fr*100:.0f}% held out; VAL_FRACTION=0 to disable)"
+            )
+    else:
+        train_data, val_data = data, data
+        use_val = False
+        if val_fr > 0.001:
+            print("val_fraction set but corpus too small for a split; using all tokens for training + loss.")
+
+    n_starts = int(train_data.shape[0]) - b
+    print(
+        f"Tokenized length: {n_tok:,} | train start positions: {n_starts:,} | mode: "
+        f"{'BPE' if bpe_tok else 'char'}"
+    )
+    if use_val:
+        n_vs = int(val_data.shape[0]) - b
+        print(f"  val start positions: {n_vs:,} (val loss = generalization on held-out tail)")
 
     model = GPT(
         vocab_size=vocab_size,
@@ -158,8 +190,26 @@ def main() -> None:
     sample_every = int(os.environ.get("SAMPLE_EVERY", "0").strip() or 0)
     sample_prompt = os.environ.get("SAMPLE_PROMPT", "The ")
 
+    es_p = int(
+        float(os.environ.get("EARLY_STOP_PATIENCE", str(getattr(Config, "early_stop_patience", 0))).strip())
+    )
+    es_mind = float(
+        os.environ.get(
+            "EARLY_STOP_MIN_DELTA", str(getattr(Config, "early_stop_min_delta", 0.0))
+        ).strip()
+    )
+    do_early = use_val and es_p > 0
+    best_state: dict | None = None
+    if do_early:
+        best_val = float("inf")
+        val_no_improve = 0
+        print(
+            f"Early stop: val patience {es_p} evals (min_delta={es_mind}) — "
+            "checkpoint = best val so far, not the last step."
+        )
+
     for step in range(max_iters):
-        x, y = get_batch(data, Config.device)
+        x, y = get_batch(train_data, Config.device)
         _, loss = model(x, y)
         opt.zero_grad(set_to_none=True)
         loss.backward()
@@ -168,18 +218,45 @@ def main() -> None:
         scheduler.step()
 
         if (step + 1) % Config.eval_interval == 0 or step == 0:
-            l = estimate_loss(model, data, Config.device)
+            l_tr = estimate_loss(model, train_data, Config.device)
             lr = scheduler.get_last_lr()[0]
-            print(
-                f"step {step+1:5d} | loss {l:.4f} | batch {loss.item():.4f} | lr {lr:.2e}"
-            )
+            if use_val:
+                l_va = estimate_loss(model, val_data, Config.device)
+                if do_early:
+                    if l_va < best_val - es_mind:
+                        best_val = l_va
+                        val_no_improve = 0
+                        best_state = {k: v.clone().detach() for k, v in model.state_dict().items()}
+                    else:
+                        val_no_improve += 1
+                print(
+                    f"step {step+1:5d} | val {l_va:.4f} | train {l_tr:.4f} | "
+                    f"batch {loss.item():.4f} | lr {lr:.2e}"
+                )
+                if do_early and val_no_improve >= es_p:
+                    print(
+                        f"  Early stop: no val gain for {es_p} evals; best val {best_val:.4f}."
+                    )
+                    break
+            else:
+                print(
+                    f"step {step+1:5d} | loss {l_tr:.4f} | batch {loss.item():.4f} | lr {lr:.2e}"
+                )
         if sample_every > 0 and (step + 1) % sample_every == 0:
             _print_train_sample(
                 model, stoi, itos, bpe_tok, Config.device, step + 1, sample_prompt, 64
             )
 
-    final = estimate_loss(model, data, Config.device)
-    print(f"final loss (avg over eval batches): {final:.4f}")
+    if do_early and best_state is not None:
+        model.load_state_dict(best_state)
+        print("Restored val-best weights for save.")
+
+    l_tr = estimate_loss(model, train_data, Config.device)
+    if use_val:
+        l_va = estimate_loss(model, val_data, Config.device)
+        print(f"final: val {l_va:.4f} | train {l_tr:.4f}  (if val > train, overfitting; if both high, underfit or hard data)")
+    else:
+        print(f"final loss (avg over eval batches): {l_tr:.4f}")
 
     out = Path(Config.checkpoint)
     out.parent.mkdir(parents=True, exist_ok=True)
