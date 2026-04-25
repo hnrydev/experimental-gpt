@@ -4,6 +4,7 @@ __pycache__/
 venv/
 env/
 models/*.pt
+models/*.tokenizer.json
 !models/.gitkeep
 outputs/*
 !outputs/.gitkeep

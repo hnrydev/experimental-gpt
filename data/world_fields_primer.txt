@@ -1,0 +1,136 @@
+WORLD FIELDS PRIMER
+Purpose: give a compact, organized map of major domains of knowledge and how they connect.
+This is not a full encyclopedia. It is structured text so a language model can learn repeated patterns:
+definitions, relations between fields, and careful language about uncertainty and evidence.
+
+=== METADATA ===
+Knowledge is split into fields for human organization. Reality itself is one connected system.
+Fields share methods: observation, measurement, formal reasoning, modeling, and criticism.
+Good claims separate: (1) definitions, (2) assumptions, (3) evidence, (4) conclusions, (5) limits.
+
+=== FORMAL FOUNDATIONS ===
+Logic: study of valid inference. Propositional logic uses true and false and connectives.
+Predicate logic adds objects, relations, and quantifiers for all and there exists.
+A proof is a sequence of steps from axioms or premises to a theorem by rules.
+Mathematics: study of structure, quantity, change, and space, built from careful definitions.
+Arithmetic: numbers and operations. Algebra: symbols, equations, and structures like groups.
+Calculus: limits, derivatives, integrals. Linear algebra: vectors, matrices, linear maps.
+Probability: measure of uncertainty; random variables; expectations; common distributions.
+Statistics: learn from data with models; estimation, testing, intervals, and prediction.
+Information theory: entropy, codes, and limits of compression and communication.
+Computation: algorithms, complexity, and what machines can compute in time and memory.
+
+=== PHYSICAL SCIENCES ===
+Physics: matter, energy, space, and time. Classical mechanics: forces, energy, momentum.
+Thermodynamics: heat, work, entropy, and equilibrium. Electromagnetism: fields, light, circuits.
+Relativity: spacetime, light speed, gravity as geometry in general relativity.
+Quantum theory: states, amplitudes, measurement, uncertainty, entanglement at small scales.
+Chemistry: atoms, bonds, reactions, phases, and energy changes. Organic chemistry: carbon-based molecules.
+Materials science: properties of solids, defects, and design of new materials.
+Earth science: geology, weather, climate, oceans, and long timescales of the planet.
+Astronomy: stars, galaxies, cosmology, and the large-scale history of the universe.
+
+=== LIFE SCIENCES ===
+Biology: life, heredity, evolution, cells, and ecosystems. Genetics: DNA, variation, and expression.
+Evolution: natural selection, drift, speciation, and the tree of life. Ecology: populations, communities, energy flow.
+Neuroscience: neurons, brain circuits, perception, and behavior mechanisms.
+Medicine: diagnosis, treatment, and evidence from trials; public health at population scale.
+Epidemiology: spread of disease, modeling, interventions, and uncertainty in real data.
+
+=== SOCIAL AND HUMAN SCIENCES ===
+Psychology: mind, behavior, learning, memory, emotion, and measurement of human performance.
+Cognitive science: mind as computation plus neuroscience, language, and development.
+Sociology: groups, institutions, networks, and social patterns. Anthropology: culture, language, and comparison across societies.
+Economics: allocation, incentives, markets, prices, trade, and macro fluctuations.
+Political science: power, institutions, voting, and policy analysis. History: evidence, narrative, and interpretation of past change.
+Linguistics: sound, grammar, meaning, and language change over time. Education: how people learn in practice and at scale.
+Law: rules, rights, and institutions; not identical to moral philosophy but interacts with it.
+
+=== HUMANITIES AND NORMATIVE FIELDS ===
+Philosophy: clear questions about existence, mind, value, and knowledge, with arguments.
+Ethics: what we ought to do, rights, justice, and tradeoffs. Metaethics: nature of moral claims.
+Aesthetics: art, beauty, and interpretation, often without single true answers in the math sense.
+Literary studies: texts, genres, and criticism with attention to context and style.
+Theology and religious studies: studied as human traditions, texts, and practices in academic mode, distinct from any one faith claim in this primer.
+
+=== ENGINEERING AND APPLIED FIELDS ===
+Engineering: design under constraints, safety, testing, and iteration.
+Computer science: systems, software, hardware, and human use of machines.
+Data science: pipelines, features, models, and careful evaluation in messy settings.
+Control theory: feedback and stability in systems from robots to the grid.
+
+=== EPISTEMOLOGY AND PHILOSOPHY OF SCIENCE ===
+Epistemology asks what knowledge is, how it is justified, and what counts as good reasons.
+Skepticism: demands standards before accepting strong claims. Empiricism: emphasis on evidence from experience.
+Rationalism: emphasis on reason and structure beyond raw sense data alone.
+Falsification: a scientific theory should be testable; predictions that fail force change.
+Paradigms: shared frameworks, puzzles, and shifts in how communities solve problems in science.
+Underdetermination: many theories can fit the same data; extra criteria matter: simplicity, scope, and fruitfulness.
+Bayesian thinking: update beliefs with evidence; priors and likelihoods, not just one yes or no.
+Causation is not the same as correlation. Interventions, mechanisms, and counterfactuals are central in careful work.
+
+=== UNCERTAINTY, BIAS, AND ERROR ===
+All measurements have noise. Models are simplifications. Overfitting: fitting noise, not pattern.
+Selection bias, confounding, and nonresponse can break naive conclusions from data.
+Reproducibility: independent checks, open methods, and honest reporting of limits.
+Adversarial examples show ML systems can be brittle. Calibration: probabilities that match long-run frequency.
+
+=== SYSTEMS, COMPLEXITY, AND EMERGENCE ===
+Many small parts can produce large scale behavior not obvious from a single part alone.
+Feedbacks, thresholds, and networks appear in climate, markets, biology, and infrastructure.
+Game theory: strategic interaction with payoffs, equilibria, and cooperation or conflict.
+Chaos: deterministic rules with sensitive dependence, limiting long term prediction in practice.
+
+=== COGNITION AND RATIONALITY ===
+Human reason uses heuristics that are fast and often good, but can fail in systematic ways.
+Metacognition: thinking about what we know, monitoring confidence, and revising.
+Educated reasoning combines formal tools with domain knowledge and checks of one s own process.
+
+=== HOW FIELDS FEED INTO WORLD MODELS ===
+A world model in the loose sense is internal structure for predictions, not a claim of perfection.
+It combines: stable facts, dynamics, and uncertainty, with a way to update when new information arrives.
+Science is the best public method we have to reduce guesswork about repeatable patterns, but it is slow, partial, and corrected over time.
+Ethics, law, and policy must act before certainty arrives; that makes explicit values and process essential.
+
+=== LANGUAGE AND LINGUISTICS (BRIEF) ===
+Phonetics studies speech sounds; phonology studies how they pattern in a language. Morphology studies word
+structure; syntax studies how words build sentences; semantics studies meaning; pragmatics studies use in
+context. Sociolinguistics studies variation by group and setting; psycholinguistics studies processing in
+the mind; historical linguistics studies change over time. Writing systems map language to visible marks; they
+are not languages themselves. Translation is not a look-up; languages carve meaning differently.
+
+=== ARTS, MEDIA, AND CULTURE ===
+Literature, film, music, and games encode stories and style; criticism interprets with attention to form
+and context. Media literacy means asking who made a message, what evidence it uses, and what is left out.
+Copyright and fair use (where they exist) balance creators, users, and follow-on creation; details vary
+by country. Museums, archives, and open collections preserve and share material culture; provenance
+matters for history and equity.
+
+=== GEOGRAPHY, TIME, AND HUMAN ORGANIZATION ===
+Maps are models with projections that distort. Latitude and longitude locate points; time zones and calendar
+rules are social conventions, though Earth rotation is physical. A country is a political entity, not always
+the same as a single culture or language. Oceans, climate zones, and biomes shape where people can live
+and how. Urbanization, migration, and remittances are large-scale human patterns, each with data and story.
+
+=== MORE LIFE SCIENCE CONNECTIONS ===
+Cell biology, biochemistry, and molecular biology connect chemistry to living processes. Developmental
+biology studies how bodies form; immunology studies defense and when it misfires. Biostatistics and study
+design matter because biology is noisy. Public health is population-scale: sanitation, food safety, and
+vaccination programs, not only individual care.
+
+=== MORE PHYSICAL AND EARTH SCIENCE ===
+Geophysics, meteorology, and hydrology use measurement and models for earth systems. Plate tectonics explains
+earthquakes, volcanism, and long-term land shape. Nuclear physics and chemistry underpin energy and
+medicine; they also need careful safety culture. Electrochemistry and materials matter for batteries and
+for the energy transition, alongside policy and cost curves.
+
+=== KNOWLEDGE ORGANIZATION AND TOOLS ===
+Encyclopedias, textbooks, and databases are curated differently; the web is vast and uneven. Peer review
+and editorial process differ by field; preprint servers post fast without implying full review. Citation
+graphs and systematic reviews help summarize evidence, but garbage in still yields garbage out. Versioned
+data and open methods improve trust for computational work.
+
+END OF PRIMER
+This file is meant to be prepended to larger narrative corpora for training, so the model often sees clear definitions
+and relations before long passages of example text. Repetition of structure in this file is intentional.
+Close with a reminder: no single file replaces broad data, but organized input improves the shape of what is learnable in small regimes.

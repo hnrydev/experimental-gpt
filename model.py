@@ -144,20 +144,108 @@ class GPT(nn.Module):
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
         return logits, loss
 
-    @torch.no_grad()
-    def generate(self, idx, max_new_tokens, temperature=1.0):
-        """
-        Autoregressive sampling: repeatedly append one sampled character.
+    @staticmethod
+    def _apply_top_k(logits: torch.Tensor, top_k: int) -> torch.Tensor:
+        top_k = min(max(top_k, 1), logits.size(-1))
+        v, _ = torch.topk(logits, top_k)
+        out = logits.clone()
+        out[out < v[:, [-1]]] = float("-inf")
+        return out
 
-        We only feed the last `block_size` tokens to stay within training context.
-        temperature scales logits: lower = more greedy, higher = more diverse.
+    @staticmethod
+    def _apply_top_p(logits: torch.Tensor, top_p: float) -> torch.Tensor:
+        sorted_logits, sorted_indices = torch.sort(logits, descending=True, dim=-1)
+        sorted_probs = F.softmax(sorted_logits, dim=-1)
+        cumprobs = torch.cumsum(sorted_probs, dim=-1)
+        sorted_remove = cumprobs > top_p
+        sorted_remove[..., 1:] = sorted_remove[..., :-1].clone()
+        sorted_remove[..., 0] = False
+        remove = sorted_remove.scatter(1, sorted_indices, sorted_remove)
+        return logits.masked_fill(remove, float("-inf"))
+
+    @staticmethod
+    def _apply_repetition_penalty(
+        logits: torch.Tensor, idx: torch.Tensor, penalty: float, context_len: int
+    ) -> torch.Tensor:
+        if penalty <= 1.0:
+            return logits
+        recent = idx[0, -context_len:].unique()
+        out = logits.clone()
+        for t in recent:
+            out[0, t] /= penalty
+        return out
+
+    @staticmethod
+    def _apply_no_repeat_ngram_mask(
+        logits: torch.Tensor, idx: torch.Tensor, n: int, logits_unmasked: torch.Tensor
+    ) -> torch.Tensor:
+        """
+        Bans a next token if the n-gram it would complete has already appeared (see
+        NoRepeatNGramLogitsProcessor in e.g. summarization decoding). If every
+        logit is masked, fall back to `logits_unmasked` (after repetition penalty).
+        """
+        if n <= 0 or idx.shape[1] < n - 1:
+            return logits
+        seq = idx[0].tolist()
+        lseq = len(seq)
+        ngrams: set[tuple] = set()
+        for i in range(lseq - n + 1):
+            ngrams.add(tuple(seq[i : i + n]))
+        prefix = tuple(seq[-(n - 1) :])
+        out = logits.clone()
+        for c in range(logits.size(-1)):
+            ngram = prefix + (c,)
+            if len(ngram) == n and ngram in ngrams:
+                out[0, c] = float("-inf")
+        if not bool(torch.isfinite(out[0]).any()):
+            return logits_unmasked
+        return out
+
+    @torch.no_grad()
+    def generate(
+        self,
+        idx,
+        max_new_tokens,
+        temperature=1.0,
+        top_k: int | None = None,
+        top_p: float | None = None,
+        repetition_penalty: float = 1.0,
+        repetition_context_len: int = 12,
+        greedy: bool = False,
+        no_repeat_ngram_size: int = 0,
+    ):
+        """
+        Autoregressive generation: multinomial by default, or **greedy** (argmax) for
+        the most likely next character at each step. Greedy has no sampling noise; on
+        a weak char-LM it can still look odd, but it often beats random pseudo-words.
+
+        ``no_repeat_ngram_size > 0`` blocks completion of n-grams already seen
+        in the current sequence (reduces stutter; common in long-form decoding).
         """
         self.eval()
         for _ in range(max_new_tokens):
             idx_cond = idx[:, -self.block_size :]
             logits, _ = self(idx_cond)
-            logits = logits[:, -1, :] / max(temperature, 1e-6)  # only predict from last time step
-            probs = F.softmax(logits, dim=-1)
-            next_id = torch.multinomial(probs, num_samples=1)  # one sample from distribution
+            logits = logits[:, -1, :]
+            logits = self._apply_repetition_penalty(
+                logits, idx, repetition_penalty, repetition_context_len
+            )
+            logits_unmasked = logits.clone()
+            if no_repeat_ngram_size > 0:
+                logits = self._apply_no_repeat_ngram_mask(
+                    logits, idx, int(no_repeat_ngram_size), logits_unmasked
+                )
+            if greedy:
+                next_id = torch.argmax(logits, dim=-1, keepdim=True)
+            else:
+                logits = logits / max(temperature, 1e-6)
+                if top_k is not None and top_k > 0:
+                    logits = self._apply_top_k(logits, int(top_k))
+                if top_p is not None and 0.0 < top_p < 1.0:
+                    logits = self._apply_top_p(logits, float(top_p))
+                probs = F.softmax(logits, dim=-1)
+                if torch.isnan(probs).any():
+                    probs = F.softmax(logits.nan_to_num(nan=0.0, neginf=0.0), dim=-1)
+                next_id = torch.multinomial(probs, num_samples=1)
             idx = torch.cat((idx, next_id), dim=1)
         return idx

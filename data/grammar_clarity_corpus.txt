@@ -1,0 +1,313 @@
+GRAMMAR AND CLARITY CORPUS
+Purpose: flood the training data with well-formed modern English. Most lines here
+are model answers to the question, "What should fluent text look and sound like?"
+A small fraction is labeled "Avoid" followed by a correction, so the model can learn
+contrast, but the weight of tokens should favor clean text. This file is original
+synthetic training text, not a full style manual. Retrain after any corpus change.
+
+=== SENTENCE CORE: SUBJECT AND VERB ===
+Every clear sentence in English needs a main clause most of the time. The subject
+tells the reader who or what acts or exists. The verb tells what happens or what
+is true. The report explains the result. The cats sleep on the rug. The wind has
+weakened since morning. In questions, the subject and auxiliary can invert: Is the
+door locked? Do the children know the time? In commands, the subject "you" is
+understood: Open the window. Add salt slowly.
+
+=== AGREEMENT: PERSON AND NUMBER ===
+The file is here. The files are here. She runs every week. They run on Sundays.
+The team is ready; the team members are ready. Neither the manager nor the
+engineers are satisfied yet. A box of parts sits on the shelf, because "box" is
+the head noun. A number of issues remain open. The number of errors is small this
+week. None of the tests pass. None of the results is conclusive in this phrasing
+style; both "pass" and "is" are seen in formal usage, so prefer consistency in one
+document.
+
+=== PRONOUNS: CLEAR ANTECEDENTS ===
+Maria called Lee because she needed an answer. This sentence is ambiguous. Better:
+Maria called Lee because Maria needed an answer, or: Maria called Lee, who could
+answer the question. The laptop is slow, and it might need a new drive. The laptop
+and the phone are old, and they will be replaced. When a person applies, he or she
+submits a form, or, in a modern inclusive style, when a person applies, that
+person submits a form, or: applicants submit a form.
+
+=== TENSE: CONSISTENCY IN A PARAGRAPH ===
+Yesterday the team met. They reviewed the list. The lead engineer presented the
+plan, and the others asked questions. Now the same story in the present, as
+habit: Each week the team meets. They review the list. The lead engineer
+presents the plan, and the others ask questions. Mixing past and present in one
+narrative confuses a reader unless you signal a shift on purpose, as in: We built
+the first version, and the new model addresses the same users with fewer steps.
+
+=== MODIFIERS: PLACE WORDS SO THEY MODIFY THE RIGHT THING ===
+I saw a dog in the car that was barking. This placement ties "barking" to the
+car, which is funny, not the goal. Better: I saw a barking dog in the car, or: In
+the car, I saw a dog that was barking. The editor returned the manuscript on
+Tuesday, not "returned the manuscript in a good mood on Tuesday" unless the mood
+stays where you intend.
+
+=== COORDINATION: PARALLEL FORM ===
+She likes to write, to edit, and to review. She likes writing, editing, and
+reviewing. She likes to write, editing, and to review is not parallel, so the
+list feels wrong. The job is to plan the test, to run the test, and to record the
+results. The job is not to plan the test, run the test, and recording, unless
+you are very careful with gerunds and to-forms in one series.
+
+=== LINKING IDEAS: CONJUNCTIONS AND ADVERBS ===
+The result is small, but it is real. The result is small; however, it is real. The
+result is real; the effect is local. A semicolon can join two closely related
+independent clauses. A comma after a short introductory phrase is often helpful:
+After lunch, the group resumed work. In summer, the office runs a lighter
+schedule, not: In summer the office runs, without a pause when a brief comma helps.
+
+=== AVOID: RUN-ONS AND COMMA SPLICES (LABELED) ===
+Avoid: The server came up the test passed we left. Use: The server came up, and
+the test passed, so we left. Or use three short sentences. Avoid: It was late, we
+went home. Use: It was late, so we went home, or: It was late. We went home. The
+word "so" and the period are both honest solutions.
+
+=== GOOD SHORT PARAGRAPHS: DESCRIPTIVE ===
+The small kitchen faces east. Light enters through a single window above the sink.
+A wooden table stands against the long wall, and two chairs sit beneath a shelf
+of plain plates. Nothing in the room is new, but the floor is clean, and the air
+smells faintly of coffee from the morning. This is enough detail for a reader to
+imagine a space without a list of every object.
+
+A winter storm arrived overnight. By morning, snow had covered the walks, and
+branches sagged over the road. A plow passed once, and then a second time, as
+the flurries continued. Schools announced a delay, not a full closure, which was
+a relief to parents who still had deadlines at work. The day remained gray until
+the wind shifted after noon.
+
+The software starts with a blank project screen. The user can import a file or
+begin from a template. Each choice opens a different panel, but the main toolbar
+stays the same, so a beginner does not have to learn two interfaces at once. A
+status line at the foot of the window shows the current file name and a simple
+health check for the last save. Error messages are short, with a code in brackets
+if the user must search for help. This tone is how professional tools respect the
+user's time.
+
+=== GOOD PARAGRAPHS: EXPLANATORY ===
+A confidence interval in statistics is not a statement that the true value has a
+certain probability of living inside the interval. Instead, the interval is
+constructed from a process that, if you could repeat the study, would capture the
+true value at a long-run rate. One realized interval, after the data are seen, is
+fixed, so casual language can misread it. A careful report states the design and
+gives a graph, not a slogan about certainty.
+
+A battery in a phone or laptop is a package of electrochemical cells, managed by
+a circuit that balances charging speed against heat. Every full cycle ages the
+chemistry a little, but keeping the state of charge in the middle range, when the
+device and software allow, can lower stress. Cold temperatures reduce available
+current for a time; heat is worse for long-term life. A user who wants maximum
+longevity can avoid leaving the device at a hundred percent and hot in a
+sunlit car, which is a simple, practical plan.
+
+=== GOOD PARAGRAPHS: NARRATIVE (PAST) ===
+She left the house before sunrise and carried a thermos in her coat pocket. The
+bus was empty for the first three stops, so she had time to reread the email that
+had kept her awake. A child with a large backpack got on, sat across the aisle,
+and unwrapped a sandwich. The bus turned toward the water, and the light changed
+from gray to pale gold as the day arrived. She felt calmer, not because the
+problem was gone, but because movement beat lying in the dark, inventing new
+fears. At her stop she thanked the driver and walked the last two blocks in air
+that still stung, but in a way she had learned to like.
+
+He opened the ticket and read it twice. The first line was the title he expected.
+The second line was a new name, a partner he had not been told about. The third
+line was a short note: please confirm by five. He walked to the window, looked
+down at the empty street, and then returned to the screen. The honest reply was
+one sentence long, but he drafted three versions first, because tone mattered
+more than length. When he sent the message, the timestamp showed one minute under
+the deadline, which he would later find funny, though he did not smile yet.
+
+=== GOOD: CAUSE AND EFFECT, CAREFUL HEDGING ===
+Because the sample was small, the estimate is noisy, and we do not know whether
+a larger study would find the same direction of effect. If the weather closes the
+airport, we will rebook, but we have not been notified yet. The bug appears when
+the cache is full, and then the client sends duplicate requests, which the server
+rejects, so the user sees an error. Until we add a back-pressure signal, the
+workaround is to clear the local cache and restart, which is annoying but safe.
+
+The city grew because trade routes converged at the river, and later because a
+new rail line reduced the cost of moving grain. A historian might argue for one
+force over another, but a simple story that ignores the river would miss the
+physical basis for the first settlement. Maps from two centuries ago show a
+smaller town with the same pattern of streets, which is evidence, not a guarantee,
+about the persistence of a plan.
+
+=== GOOD: INSTRUCTIONS IN ORDER ===
+To reset the device, first unplug the power. Wait ten seconds. Press the small
+recessed button on the back with a paperclip for five seconds. While you hold the
+button, have someone else plug the power in again. When the light blinks, release
+the button. The device will boot into recovery mode, where the screen shows a
+list of options. This sequence is an example; follow the manual for your device.
+
+To summarize an article, read the abstract and the first and last sections.
+Then read the middle with a light pencil mark next to a claim in each paragraph.
+When you write your summary, list only the claims you marked, and add no new
+criticism that the author did not invite. A summary is not a review unless you
+label it as such.
+
+=== GOOD: DIALOG, STANDARD PUNCTUATION ===
+"I do not know yet," she said. "I will know after the call."
+He asked, "When does the call start?"
+"At three. Can you be there?"
+"Yes, but I will need the dial-in number."
+"Of course. I will forward the invite now."
+
+The rules are simple. Use a comma before a tag like "she said" if the tag follows
+a full clause. Question marks and exclamation points stay with the question or
+exclamation, not doubled at the end of a tag. Each new speaker begins a new
+paragraph in formal narrative.
+
+=== SENTENCE VARIETY: RHYTHM ===
+Long sentences have their place when the clauses are parallel and the reader can
+follow, but a page of only long sentences is tiring. Short sentences help. They
+punch. A mix of lengths is natural in clear prose. A draft that has ten sentences
+in a row with the same opening pattern, such as "The X is" or "It is," can often
+be revised by moving one adverb, combining two thoughts, or breaking one long line
+in half for emphasis.
+
+=== VOCABULARY: PRECISE BUT PLAIN ===
+A book can be long or lengthy; "lengthy" sometimes adds a sense of tedium, so
+choose on purpose, not at random. "Fewer" goes with count nouns, as in fewer
+errors; "less" goes with mass and degree, as in less noise. Affect and effect
+are a common pair: the verb is often "affect," the noun, "effect," with exceptions
+in formal psychology, where a noun "affect" can appear, rare in general prose.
+"Between" is for two clear items; "among" fits many, though "between" appears in
+a phrase like "between the four of us" when the group is small and named. These
+nuances are training signal for a model that will write, not a license to pedant
+in chat.
+
+=== MORE WELL-FORMED DECLARATIVES (FOR TOKEN STATISTICS) ===
+The report is due on Friday. The data are in the folder, if you use British
+plural, or: The data is in the folder, in many modern software contexts. The
+phenomenon is rare, but the phenomena in this set are not all rare, so the writer
+chose a simpler phrasing. The analysis suggests a small benefit. The analysis does
+not prove causation. The results align with the earlier work in three of four
+comparisons. The fourth comparison has a wide interval, so we do not overstate the
+agreement.
+
+We measured height in centimeters, weight in kilograms, and blood pressure in
+millimeters of mercury. The units are consistent within each column, and a note
+in the table caption names the day of calibration for the scale. A reader who
+works in other units can convert, and the paper lists the constant factors. Clarity
+helps replication, which is the point of a methods section.
+
+The meeting had three goals, and the chair stated them in the first minute. The
+first goal was to agree on a timeline. The second was to assign owners. The third
+was to set a process for a mid-week check that would not add a new standing
+meeting unless the data showed a need. Everyone left with the same list in a
+shared document, which is better than a memory of a summary.
+
+=== WELL-FORMED QUESTIONS AND ANSWERS (CLEAN REGISTER) ===
+Q: How do I know when to use "who" and when to use "whom"? A: "Who" acts as a
+subject, as in, Who left the file open? "Whom" is an object, as in, To whom should
+I send the form, or, Whom did you ask? In informal speech, many people say "Who
+did you ask," but edited prose often keeps "whom" after a preposition for clarity
+and register.
+Q: Is it wrong to end a sentence with a preposition? A: In modern English, not
+usually; clarity beats a contorted phrase. What are you working on, is natural.
+Q: Is it wrong to split an infinitive? A: Not a crime; "to go boldly" and "to
+boldly go" are both used; choose the rhythm the sentence needs, not a fake rule
+from a different century.
+Q: What is the Oxford comma? A: A comma before the last item in a list, which can
+remove ambiguity, as in, We thank our parents, A, and B, if A and B are the names
+of two people, not "parents" plus "A and B" smushed. Style guides differ; the key
+is consistency within a document and clarity for the reader.
+Q: What is a dangling modifier? A: A description that is not next to the noun it
+is meant to describe, as in, Walking to the bus, the rain started, which reads as
+if the rain walked, unless you fix it. Better: As I walked to the bus, it started
+raining, or: Walking to the bus, I felt the first drops.
+
+=== AVOID / CORRECT PAIRS (LABELS ARE PART OF THE TRAINING) ===
+Avoid, vague: "It is a question of things and stuff." Better: "The issue is the
+size of the budget, not the schedule, so we can decide today."
+Avoid, double negative with confusion: "I do not have no time." In standard English:
+"I have no time," or, "I do not have time," not two negatives in one, unless
+dialect is a deliberate style choice in fiction.
+Avoid, subject missing: "After checking the file, the bug was not seen." The
+file did not see the bug; a person should be the one checking. Better: "After
+checking the file, the engineer did not see the bug," or: "After the file was
+checked, the bug was not found."
+Correct: The engineer checked the file, but the bug was not there. The engineer
+looked in the right place, but the wrong build was on the test machine, which is a
+different class of error.
+
+=== PASSAGES FOR COHERENCE: MILD OPINION, SUPPORTED ===
+A city needs reliable transit, safe water, and schools that serve every child, not
+only a subset. Money alone does not build trust; process does. When a project is
+rushed without public comment, the next project faces resistance even if the plan
+is sound, because people need to feel that the rules are fair. A long review can
+seem slow, so the balance is a realistic schedule, open documents, and a way to
+answer questions in plain language. This is not a manifesto, only a paragraph a
+civic reader can follow without guessing what the next sentence will do.
+
+A small team can move quickly when the scope is narrow, the spec is real, and the
+decision makers sit in the same room at least once a week. When the product grows
+past that size, the old habits break unless someone rewrites the org chart, not
+the code, and the rewrite has to be honest. Adding five people to a three-person
+meeting is not a larger meeting in the same sense; it is a new meeting with a
+new set of side conversations. Clear writing about roles helps more than a
+poster about agility.
+
+=== PASSAGES: DEFINITION, THEN EXAMPLE, THEN TAKEAWAY ===
+A checksum is a short number or string that summarizes a file for error detection.
+If a single bit flips, the checksum usually changes, and the system knows the copy
+is bad. A checksum is not a secret: anyone can recompute it if they have the
+algorithm and the file, so a checksum is not, by itself, a security system; it
+detects honest mistakes, not a clever attacker, unless you combine it with
+signing. The takeaway: use it in downloads and in backups, and do not call it
+encryption. That three-part shape, definition, example, takeaway, is good training
+for text that "makes sense" as a unit.
+
+A histogram shows how often values fall in bins, not a line through time, unless
+the x-axis is an ordered time bin. If you have ten thousand test scores, a
+histogram of scores answers "how many people scored near each value," and you
+see modes and skew. A box plot, by contrast, marks quartiles. Each chart is right
+for a question, not for every question. A paper that slaps a chart in without
+stating the question is weak; a good caption states the data source, the
+variable, the units, and the sample size, all in a few lines. That is another
+coherent block for the model to learn.
+
+=== RANDOM COHERENT FACTS IN CLEAR SENTENCES (SINGLE DOMAIN PER BLOCK) ===
+Mars is smaller than Earth, with a thin atmosphere, mostly carbon dioxide, and
+surface features that show ancient water flows in some areas. The day on Mars is
+a little longer than a day on Earth, which matters for landing windows and
+communication schedules, not for poetry. Rovers on Mars send data through relay
+orbits, because a direct line to the deep-space network is not always available.
+A paragraph like this is simple, with one topic and no fake drama.
+
+A river delta forms where a river meets standing water, slows, and drops sediment.
+The shape of the land changes over centuries; maps need updates. Deltas are often
+fertile for agriculture, and also at risk when sea level rises or when upstream
+dams trap sediment that the delta used to receive. Clear sentences, one process
+at a time, are good grammar for a reader who does not work in the field, but
+wants to read without stopping every line.
+
+=== WELL-MADE LISTS, PARALLEL, WITH INTRO SENTENCE ===
+The handoff will succeed if the following are true. First, the build is in the
+right branch, tagged, and not ahead of a merge that failed. Second, the release
+notes list user-visible changes, and nothing else, because internal refactors
+belong in the team log, not the customer page. Third, a named person is on call for
+eight hours after the push, and that person is not the same person who wrote every
+line of the release, to reduce blind spots. A list of three, each item parallel in
+form, is easier to read than a run of sentences that hide the number of
+requirements. That style is a skill worth modeling.
+
+The recipe needs four ingredients, all in one bowl before the oven. First, measure
+the flour and the salt into a dry bowl, and stir once. Second, crack the eggs into
+a small cup, check for shell, and add the eggs. Third, melt the butter, cool it
+until it is warm, not hot, and pour the butter. Fourth, fold the wet and dry
+until no dry streaks remain, then stop, because more folding makes the result
+tough. Sentences that begin with a word like "first" set an expectation, so the
+reader is satisfied when the pattern continues.
+
+=== CLOSING: GOAL ===
+This file rewards the model for predicting standard English, complete clauses,
+punctuation that matches the pace of speech, and short paragraphs with one main
+point each. Bigger or older corpora are still the backbone of a training run; this
+layer is a grammar-forward supplement. Retrain, do not just append, if you need
+the weights to move.
+
+END OF GRAMMAR AND CLARITY CORPUS

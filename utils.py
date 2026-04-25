@@ -10,6 +10,7 @@ Naming:
 """
 
 import unicodedata
+from pathlib import Path
 
 import torch
 
@@ -38,14 +39,37 @@ def clean_text(s: str) -> str:
 
 
 def load_text(clean: bool | None = None):
-    """Read the whole corpus from disk as one Python string."""
+    """
+    Load the training corpus: one file (Config.dataset) or several in order (Config.corpus_files).
+
+    When `corpus_files` is set, files are concatenated with a short header so the model sees
+    which section is which. Put structured primers *first* for a stable "map" before long text.
+    """
     if clean is None:
         clean = getattr(Config, "clean_corpus", True)
-    with open(Config.dataset, "r", encoding="utf-8") as f:
-        text = f.read()
+    paths = getattr(Config, "corpus_files", None)
+    if not paths:
+        paths = (Config.dataset,)
+
+    chunks: list[str] = []
+    for p in paths:
+        path = Path(p)
+        if not path.is_file():
+            print(f"Warning: corpus file missing, skipping: {path}")
+            continue
+        body = path.read_text(encoding="utf-8")
+        chunks.append(f"[corpus file: {path.as_posix()}]\n{body}")
+
+    text = "\n\n".join(chunks)
+    if not text.strip():
+        raise SystemExit("No corpus text loaded. Check Config.corpus_files / dataset paths.")
     if clean:
         text = clean_text(text)
-    print(f"Loaded {len(text):,} characters from {Config.dataset}" + (" (cleaned)" if clean else ""))
+    used = [Path(p).as_posix() for p in paths if Path(p).is_file()]
+    print(
+        f"Loaded {len(text):,} characters from {len(used)} file(s): {', '.join(used)}"
+        + (" (cleaned)" if clean else "")
+    )
     return text
 
 

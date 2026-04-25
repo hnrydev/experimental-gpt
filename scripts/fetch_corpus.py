@@ -1,16 +1,19 @@
 """
-Download public-domain books from Project Gutenberg and build data/input.txt.
+Download public-domain texts from Project Gutenberg and build data/input.txt.
 
-Sources are English prose (novels) — good for learning ordinary sentence structure
-at the character level. Only use texts you are allowed to use; these IDs are
-standard Project Gutenberg releases.
+Default list mixes **novels** (long narrative) with **essays, drama, and science**
+so the char-level LM sees more registers than one kind of 19c prose — better
+statistical variety, not a substitute for a chat-tuned or instruction-tuned model.
 
-Politeness: small delay between requests; set a descriptive User-Agent.
-See https://www.gutenberg.org/policy/robot_access.html
+Only use texts you are allowed to use. Politeness: delay between requests;
+set a descriptive User-Agent. See https://www.gutenberg.org/policy/robot_access.html
 
 Usage:
   python scripts/fetch_corpus.py
   python scripts/fetch_corpus.py --max-chars 2000000
+  python scripts/fetch_corpus.py --books novels   # first batch only
+  python scripts/fetch_corpus.py --books diverse  # second batch (after novels)
+  python scripts/fetch_corpus.py --books all      # default: novels then diverse
 """
 
 from __future__ import annotations
@@ -20,8 +23,10 @@ import time
 import urllib.request
 from pathlib import Path
 
-# (url, short label for logs)
-BOOKS: list[tuple[str, str]] = [
+# (url, short label for logs) — `novels` = long English fiction; `diverse` = history,
+# science, philosophy, essays, drama, vernacular (still English text from Gutenberg).
+
+BOOKS_NOVELS: list[tuple[str, str]] = [
     ("https://www.gutenberg.org/files/1342/1342-0.txt", "Pride and Prejudice (Austen)"),
     ("https://www.gutenberg.org/files/11/11-0.txt", "Alice in Wonderland (Carroll)"),
     ("https://www.gutenberg.org/files/84/84-0.txt", "Frankenstein (Shelley)"),
@@ -29,7 +34,49 @@ BOOKS: list[tuple[str, str]] = [
     ("https://www.gutenberg.org/files/2701/2701-0.txt", "Moby-Dick (Melville)"),
     ("https://www.gutenberg.org/files/345/345-0.txt", "Dracula (Stoker)"),
     ("https://www.gutenberg.org/files/98/98-0.txt", "A Tale of Two Cities (Dickens)"),
+    ("https://www.gutenberg.org/files/76/76-0.txt", "The Adventures of Tom Sawyer (Twain)"),
 ]
+
+# Non-fiction, drama, mixed registers — more "topics" for the n-gram/char prior.
+BOOKS_DIVERSE: list[tuple[str, str]] = [
+    ("https://www.gutenberg.org/files/1228/1228-0.txt", "On the Origin of Species (Darwin)"),
+    ("https://www.gutenberg.org/files/2680/2680-0.txt", "Meditations (Aurelius, tr. Long)"),
+    ("https://www.gutenberg.org/files/205/205-0.txt", "Walden (Thoreau)"),
+    (
+        "https://www.gutenberg.org/files/16643/16643-0.txt",
+        "Essays, First Series (Emerson)",
+    ),
+    (
+        "https://www.gutenberg.org/files/18/18-0.txt",
+        "The Federalist Papers (Hamilton, Madison, Jay)",
+    ),
+    ("https://www.gutenberg.org/files/1524/1524-0.txt", "Hamlet (Shakespeare)"),
+    (
+        "https://www.gutenberg.org/files/132/132-0.txt",
+        "The Art of War (Sun Tzu, Giles tr.)",
+    ),
+    (
+        "https://www.gutenberg.org/files/730/730-0.txt",
+        "The Autocrat of the Breakfast-Table (O.W. Holmes)",
+    ),
+    (
+        "https://www.gutenberg.org/files/1952/1952-0.txt",
+        "The Yellow Wallpaper (Gilman)",
+    ),
+]
+
+
+def _book_list(which: str) -> list[tuple[str, str]]:
+    w = which.strip().lower()
+    if w in ("all", "mixed"):
+        return list(BOOKS_NOVELS) + list(BOOKS_DIVERSE)
+    if w in ("novels", "fiction"):
+        return list(BOOKS_NOVELS)
+    if w in ("diverse", "nonfiction", "essays", "non-fiction"):
+        return list(BOOKS_DIVERSE)
+    raise SystemExit(
+        f"Unknown --books {which!r}; use all, mixed, novels, or diverse (synonyms: fiction, nonfiction, essays)"
+    )
 
 USER_AGENT = "baby-gpt/1.0 (local educational use; contact: not-a-bot@localhost)"
 REQUEST_DELAY_S = 2.0
@@ -80,7 +127,15 @@ def main():
         action="store_true",
         help="Do not write input.txt.bak if input.txt already exists",
     )
+    p.add_argument(
+        "--books",
+        type=str,
+        default="all",
+        help="Which URL list: all (novels then diverse, default), novels, or diverse. "
+        "Synonyms: mixed=all, fiction=novels, nonfiction|essays=diverse",
+    )
     args = p.parse_args()
+    books = _book_list(args.books)
 
     root = Path(__file__).resolve().parents[1]
     out = root / args.out
@@ -93,7 +148,7 @@ def main():
 
     parts: list[str] = []
     total = 0
-    for url, label in BOOKS:
+    for url, label in books:
         if total >= args.max_chars:
             break
         print(f"Fetching {label} ...")

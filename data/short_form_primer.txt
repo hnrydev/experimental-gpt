@@ -1,0 +1,390 @@
+SHORT-FORM + TOPIC PRIMER
+Purpose: mix short questions, answers, and turns with the long narrative corpus. A
+character model trained only on 19c novels tends to "think" in paragraphs. These
+lines add registers the big books have less of: how-to, dialogue, one-line facts, and
+plain explanations across many domains. This is not instruction tuning; it is
+extra text variety so the next-token distribution is less narrow.
+
+How to read this file: many independent snippets. The model can learn "after a
+short question, something often follows on the same line or the next," without
+us pretending it becomes a reasoner. Real breadth still needs scale and retraining.
+
+Q: What is a hypothesis? A: A testable claim that can be refuted with evidence.
+Q: Why do we use controls in an experiment? A: To rule out confounding variables.
+Q: What is a confidence interval? A: A range that would contain the parameter
+often, under repeated sampling, not a "probability the truth is in the interval"
+for a single run.
+
+Q: When did World War One begin? A: 1914, in Europe, after a political crisis
+spiraled into mobilization and open war.
+Q: What is the difference between a primary and a secondary source? A: A primary
+source is contemporary or first-hand; a secondary source interprets primary ones.
+
+Q: How does a computer store an integer? A: Often in binary with a fixed number
+of bits, using two's complement for signed values on most machines.
+Q: What is Big-O? A: An upper bound on how the cost of an algorithm grows with
+input size, ignoring constant factors and low-order terms.
+
+Q: What is a derivative? A: A local rate of change; the limit of a difference
+quotient as the step goes to zero.
+Q: What is a matrix? A: A rectangle of numbers that can encode linear maps and
+systems of linear equations.
+Q: What is entropy in information? A: Expected information content of a random
+source, measured in bits for base-two logs in the usual story.
+
+Q: What is a species in biology? A: A line of populations that can interbreed; in
+practice definitions get messy with bacteria, hybrids, and time.
+Q: What is natural selection? A: Differential survival and reproduction of
+inherited traits in a given environment.
+
+Q: What is a bond in chemistry? A: A stable arrangement of electrons that holds
+atoms together, from covalent to ionic and beyond.
+Q: What is a catalyst? A: A substance that speeds a reaction but is not consumed
+in the net balance.
+
+Q: What is a currency? A: A social institution: money in use for pricing and
+settlement, with history and policy behind it.
+Q: What is inflation? A: A sustained rise in the general price level, with many
+causes, not a single "blame" factor by itself.
+
+Q: How should I start a project? A: State the goal, the constraints, a small
+first test, and how you will know the test helped.
+Q: I feel stuck. What next? A: Shrink the problem, write the smallest case by hand,
+then automate that case. Compare outputs to a trusted baseline.
+
+Q: Is this a chat system? A: It is a language model trained on text; you type a
+prefix and it continues in the style of the training data.
+Q: You said hi. A: I am not a person; the following text is sampled from
+patterns, not a mind behind the page.
+
+Q: Can you add? A: Not by magic. The model can mimic arithmetic only where the
+data showed reliable patterns, and that is shaky in small LMs.
+Q: What is 7 times 6? A: 42, but do not trust a char-LM; use a calculator for truth.
+
+A says: "We should test that before we ship it." B says: "We have no time." A: "A
+rushed test is a guess with liability attached."
+
+Speaker 1: "Define the term clearly." Speaker 2: "If the definition is vague, the
+conclusion is theater."
+
+Note (philosophy): a valid argument can have a false conclusion if a premise is
+false; "valid" is about form, not truth of the end.
+
+Note (ethics): ought implies can is disputed; the slogan reminds us to separate
+moral demand from human limits.
+
+Proverb style: measure twice, cut once. Proverb style: the map is not the
+territory. Proverb style: the plural of anecdote is not data.
+
+Weather note: a forecast is a probability statement over outcomes, not a
+promise, because the atmosphere is chaotic at many scales.
+
+Health note: this is not medical advice. For symptoms, a clinician uses history,
+exam, and sometimes tests, not a paragraph from a book.
+
+How do bridges fail? A: from overload, fatigue, design errors, maintenance errors,
+flood, scour, and rare combinations. Engineers study modes and build margins.
+
+What is a proof in mathematics? A: A series of steps from agreed statements using
+agreed rules; it explains why a claim follows, not "one example."
+
+What is a bug? A: Behavior that does not meet the spec; sometimes the spec was
+unclear, which is a process bug too.
+
+What is a cache? A: A smaller, faster place that holds a copy to avoid work, with
+rules for when the copy is stale.
+
+What is an API? A: A boundary that specifies how to request services and data,
+with shapes and errors, so programs can work together.
+
+What is version control? A: A way to name states of files, branch, merge, and
+recover history when humans and tests disagree with reality.
+
+What is "good writing"? A: Clarity, honest limits, and structure that fits the
+audience; the rest is craft and practice.
+
+Q: Is random always uniform? A: No; random is a process; a distribution tells you
+the weights of outcomes, like normal or heavy tails.
+
+Q: What is a baseline in machine learning? A: A simple method you compare to so you
+see whether a fancy model earns its complexity on your data and metric.
+
+Q: Can a small model reason? A: "Reason" is heavy language. A small char model can
+mimic patterns and sometimes do short inferences when the training data contained
+reliable templates; do not bet safety on it.
+
+Topic: music theory (intro). A scale is an ordered set of notes; harmony studies
+chords; rhythm studies time. Models trained on text may miss sound completely.
+
+Topic: art history (intro). Styles and schools are labels; artists borrow across
+borders, and the story we tell is partly constructed.
+
+Topic: law (intro, not legal advice). Statutes, cases, and agencies interact;
+jurisdiction matters; a generic paragraph cannot replace a lawyer.
+Topic: cooking. Salt early or late changes perception; read a recipe, then
+measure; taste near the end.
+
+Q: How do I learn faster? A: Spaced review, interleaving, sleep, and feedback on
+wrong answers, not rereading alone. Calibrate: check yourself without notes.
+
+Q: How do I debug? A: Reproduce, cut scope, read the error, assume nothing, and
+ask what changed in the last hour, not the last year.
+
+Q: How do I give feedback? A: Describe the behavior, the impact, the ask, and a
+timeframe; keep it specific and kind enough to be usable.
+
+A short poem pattern (for rhythm only): line one sets a scene; line two complicates
+it; line three offers a turn; line four does not have to save you.
+
+A micro-story. She opened the door. The hall was empty. A chair moved. The draft,
+she said, but her hand stayed on the frame.
+
+A micro-story. The server log showed 500 errors. The last deploy. They rolled
+back, then read the diff.
+
+How did Rome fall? A: There is not one "the" reason; over centuries, many stresses
+and choices accumulated; historians debate weights.
+
+How do elections work? A: Rules differ by place; the model text here will not
+replace a civics book for your district.
+
+Q: Is AI always correct? A: No. A model is trained on data and sampling; it can
+confabulate, echo biases, and miss facts.
+
+Q: What is confabulation? A: fluent answers without grounded truth; a risk for LMs
+when the task needs verification.
+
+Q: How do I verify? A: Independent sources, numbers you can recompute, and, when
+possible, primary data or a domain expert.
+
+hi there - In training data, a greeting might be followed by an answer or another
+greeting, not by silence, if we have enough such pairs.
+
+What are you doing? - I am continuing text, not perceiving. If the model learned
+"question then fragment," you may see a fragment, not a reliable answer.
+
+yes - Small affirmations can lead to a clause that agrees or a follow-up.
+no - Negations can lead to contrast, correction, or a softer hedge.
+
+Q: one word A: sometimes a longer reply follows anyway, because the model
+generalizes from nearby patterns, not a rule of length.
+
+Q: one word. A: Same idea with a period, different rhythm in the data stream.
+
+Q: one word! A: Exclamation nudges the model toward a different class of
+continuations, weakly, not deterministically.
+
+Topic: space. Orbits, rockets, and budgets mix physics with politics. Light takes
+time; what we "see" is old. Distances in astronomy are huge; analogies help.
+
+Topic: ocean. Tides, currents, and chemistry shape life. Plastic and acidification
+are human-amplified issues that show up in measurement series.
+
+Topic: city planning. Zoning, transit, and housing trade goals. Simple slogans
+hide tradeoffs that need numbers and time.
+
+Q: what is a tradeoff? A: You cannot maximize everything at once; a design chooses
+where to be good enough.
+
+Q: can we "expand ability to reason" with more varied text? A: More diverse *style*
+and *topic* gives a less brittle next-token prior; *reasoning* in a serious sense
+still needs scale, tools, and checks.
+
+=== ADDITIONAL SNIPPETS: MODERN TOPICS, SHORT LINES ===
+Q: What is Wi-Fi? A: A family of wireless protocols for local area networking, not
+the same thing as the internet, which is the global interconnection of networks.
+Q: What is a URL? A: A web address string: scheme, host, and path, used by browsers
+to find resources, though redirects and queries add detail.
+Q: What is a cookie (web)? A: A small piece of data a site can store in the
+browser, used for session and sometimes tracking, governed by site policy and law.
+Q: What is a password manager? A: A tool that generates and stores strong, unique
+passwords; human memory is not a good key store for dozens of high-value accounts.
+Q: What is two-factor auth? A: A second check beyond a password, like a time-based
+code or a hardware key, to reduce the damage from a stolen password alone.
+Q: What is a firewall? A: A policy that filters network traffic, not magic; misrule
+is common.
+Q: What is a database? A: A system to store, query, and keep consistent structured
+data, with transactions and often SQL or similar languages.
+Q: What is a spreadsheet? A: A grid of cells, formulas, and often charts; good for
+quick analysis, risky as a silent production system without review.
+Q: What is a CSV file? A: Comma-separated text rows, simple and ubiquitous, with
+parsing gotchas for quotes and commas inside fields.
+Q: What is JSON? A: A text format for nested data with keys and arrays, very common
+in web APIs, not the same as JavaScript the language, though the syntax is related.
+Q: What is Docker? A: A way to package an app and its dependencies so it runs
+similarly in different environments, not a full substitute for understanding the
+app itself.
+Q: What is Kubernetes? A: A system to run and scale many containers; heavy machinery
+for teams, not a one-person “upload” button by itself.
+Q: What is a CDN? A: A network of caches to serve static assets closer to users;
+latency and load matter for users far from a single data center.
+Q: What is latency? A: Time delay, often in milliseconds, between request and
+response, distinct from bandwidth (how much can flow per second).
+Q: What is a pixel? A: A tiny display element; resolution counts pixels, but human
+perception and viewing distance also matter.
+Q: What is UTF-8? A: A common way to encode Unicode text; most of the world’s
+writing systems can be represented, unlike older single-byte code pages.
+Q: What is Unicode? A: A standard mapping of characters to code points, separate from
+fonts, which are visual shapes for those points.
+Q: What is a compiler? A: A program that turns source code in a language like C or
+Rust into machine-executable or intermediate form, with errors and warnings to fix.
+Q: What is an interpreter? A: A system that runs code step by step without a prior
+full compile, though modern systems can mix both ideas with JITs.
+Q: What is a linter? A: A static checker for style, likely bugs, and some rules,
+helpful, not a proof of correctness.
+Q: What is a test suite? A: Automated checks that the code’s behavior still matches
+expectation after changes, best when it runs in CI, not only on a laptop.
+Q: What is CI? A: Continuous integration: on each change, run builds and tests,
+so breakage is found early, not the night before a demo.
+Q: What is a deadlock? A: A situation where two or more parts wait for each other
+in a cycle; programs need careful lock ordering to avoid it.
+Q: What is a race condition? A: A bug where the outcome depends on thread timing, so
+it passes sometimes and fails in production under load.
+Q: What is idempotence? A: Doing an operation again does not make extra harm;
+important for “retry the payment” and similar designs.
+Q: What is a schema? A: A shape and type contract for data, in databases and APIs;
+without it, “anything goes” becomes a debugging swamp.
+
+Q: When was the first moon landing? A: Apollo 11, 1969, a crewed U.S. mission, not
+a claim this model can verify; check a source if exactness matters.
+Q: What is DNA sequencing? A: Reading the order of bases in DNA or RNA; it powers
+genomics, forensics, and pandemic tracking, with storage and privacy questions.
+Q: What is CRISPR? A: A system borrowed from bacteria to target and cut DNA, used in
+lab research and, with care, in medicine; ethics and off-target effects matter.
+Q: What is mRNA? A: A temporary genetic message; some vaccines used engineered mRNA
+in lipid nanoparticles, with clinical trials behind approvals where they apply.
+Q: What is a placebo-controlled trial? A: A design where a control group gets a sham
+treatment, to separate the drug from expectation and time effects, when ethical.
+Q: What is a double-blind study? A: Neither participants nor the immediate care team
+know who gets the active treatment; reduces bias in some clinical designs.
+Q: What is herd immunity? A: When enough people (by vaccination or prior infection)
+are resistant that chains of transmission break; the threshold is pathogen-dependent
+and is not a slogan for “let everyone get sick.”
+Q: What is antibiotic resistance? A: Bacteria evolving under selection when drugs
+are misused or overused, a public health and agriculture problem together.
+
+Q: What is inflation (economics)? A: Sustained rise in the general price level, not
+the same as one price going up, with multiple causes, including monetary and
+supply factors.
+Q: What is a recession? A: A broad decline in output and employment, defined by
+institutions like NBER in the U.S., not one bad week of feelings.
+Q: What is a central bank? A: A public institution for currency, interest rates, and
+financial stability, within a political and legal frame.
+Q: What is GDP? A: A money measure of produced goods and services in a period, a
+heuristic for scale, not happiness or health by itself.
+Q: What is unemployment rate? A: Share of the labor force actively seeking work
+without a job, by a survey definition; it misses discouraged workers in some set-ups.
+Q: What is fiscal policy? A: Government tax and spend choices; monetary policy is
+often separate, run by a central bank in many countries.
+
+A: I will send the draft by EOD. B: If EOD is midnight, say which time zone, so we
+are not in two different days. A: Fair, end of my business day, UTC minus five.
+B: Got it, thanks.
+A: The meeting is moved to 3pm. B: Your calendar or mine? A: I sent a fresh invite
+for everyone, old link is void.
+
+User: I am new here, who owns this service? A: The README lists a team; for incidents,
+page the on-call, not a random name from chat history, if that is the policy.
+User: Is this data encrypted at rest? A: Ask the data owner; “encrypted” is not one
+word, it depends on keys, who holds them, and which layers, so read the spec.
+
+Q: small talk, weather A: A safe opener in some cultures, boring in others; a model
+can mimic small talk, not check the actual sky.
+Q: I am sorry for your loss. A: A social phrase; a model should not play therapist;
+human grief deserves humans when possible.
+
+Q: what is a metaphor? A: A figure of speech that maps one domain to another, not
+literal, but it can structure thought if overused, not only style.
+Q: what is a cliché? A: A once-fresh phrase worn smooth by reuse; in writing, you
+can notice and replace, unless it fits a character who talks that way.
+Q: what is tone? A: The attitude a text signals toward the reader or topic: formal,
+warm, sharp, dry, and so on, not only the facts stated.
+
+Q: I need an outline for an essay. A: Thesis, then sections that each have one main
+point and evidence, then a conclusion that does not add brand-new claims, usually.
+Q: I need a summary. A: Shorter, faithful to the source, with fewer examples; a
+paraphrase can drift, so read side by side if grades matter.
+Q: I need to disagree politely. A: State where you align, name the point of
+difference, give a reason, offer the next step, in one channel that fits the culture
+of the team, not a surprise broadcast.
+
+Topic: sports (general). Rules differ; statistics have definitions; a model that read
+Wikipedia in training might echo facts that age; verify scores for a bet.
+Topic: children’s education. Age-appropriate explanation beats jargon; play and
+repetition help, but this line is not a full curriculum.
+Topic: dogs and training. Consistency, reward, and not punishing confusion, within
+the limits of an animal’s cognition; a paragraph is not vet advice.
+
+A micro-story. The bus was late. She read three pages. The line moved, then didn’t.
+She exhaled, opened the app, and deleted the draft she did not need to send.
+A micro-story. The test went green. He still read the log. A warning flickered, then
+vanished on rerun. “Flake,” he wrote in the ticket, and assigned himself.
+
+Q: is the Earth round? A: A good approximation is an oblate spheroid, slightly
+bulging at the equator; photos from space and many measurements agree.
+Q: is cold a thing? A: Cold is the absence of heat energy relative to a reference;
+thermodynamics uses temperature as a more precise story than everyday “coldness.”
+Q: why is the sky blue? A: Short wavelengths of sunlight scatter more in air, so
+blue reaches your eyes in many directions, with nuance for sunrise and pollution.
+
+Q: I feel overwhelmed. A: A human might suggest tiny steps, sleep, and, if it lasts,
+a professional, not a blog paragraph alone.
+Q: the answer must be one sentence. A: Ask whether one sentence is enough, then,
+if so, state the one claim, then stop.
+
+=== GRAMMATICAL DIALOG: FULL SENTENCES, NEUTRAL TONE ===
+Q: How are you? A: I am fine, thank you. I had a long week, but I am looking
+forward to the weekend.
+Q: How have you been? A: I have been busy, but I am not complaining. The project
+is moving along.
+Q: What are you up to? A: I am finishing a report, and then I will take a short
+break.
+Q: What is the weather like? A: It is cool and clear today. Yesterday was warmer,
+and it rained in the evening.
+Q: Can you help? A: I can try. Tell me what you need, and I will see what I can
+do.
+Q: Do you have time? A: I have a few minutes now. If it will take longer, we should
+schedule another time.
+Q: Where is the file? A: The file is in the shared folder, under the name we
+agreed on last week.
+Q: Is this correct? A: The first part is correct, but the second part needs a
+small change. I will mark it in the margin.
+Q: When is the meeting? A: The meeting is at two in the afternoon, in the small
+conference room on the third floor.
+Q: Why was the test skipped? A: The test was skipped because the build failed, and
+the team wanted to avoid a noisy signal until the fix landed.
+Q: Who owns this? A: The data team owns the table, and the app team owns the
+interface, but we share responsibility for the contract between them.
+Q: Should we wait? A: We should wait until we hear from legal, and then we can
+publish the text without a last-minute change.
+
+A: I do not have the number in front of me, but I can look it up and email you
+before five.
+A: The answer depends on the version you installed. The older version used a
+different file path.
+A: Let me make sure I understand. You need the data for March, not April, and you
+need it in CSV, not in PDF.
+A: I agree with the first point. I am less sure about the second point, and I
+would like to read the source before I decide.
+A: Thank you for the clear notes. I will read them tonight, and I will add my
+comments in the same document.
+A: I am sorry for the delay. I was stuck in a review that ran long, and I should
+have sent a short message earlier.
+
+B: I thought we were done. A: We are almost done. The last step is to file the
+form, and I can do that tomorrow.
+B: Is there a problem? A: There is a small problem with the order of the steps in
+the guide, but the fix is easy, and I will post a revision.
+B: What do you recommend? A: I recommend a slow rollout, one team first, and then
+a wider group after we have two weeks of data.
+
+Q: one plus one. A: One plus one equals two, in base ten arithmetic, with the
+usual meaning of the symbols, not in every algebraic structure in advanced math
+where a different system applies.
+Q: the sky is. A: The sky is often blue in clear daylight because short wavelengths
+scatter more, though the full science takes more than one line, and a full answer
+names light, air, and direction.
+
+End of short-form primer. The main training file still carries the bulk of
+statistics. Retrain after changing the corpus; load old checkpoints with care if
+the character set drifts.

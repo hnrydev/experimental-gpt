@@ -1,6 +1,6 @@
 # baby-gpt
 
-Minimal **char-level** GPT in PyTorch: config, data utils, small causal Transformer, `train.py`, `generate.py`, and interactive `chat.py`.
+Minimal **GPT in PyTorch** (character tokens by default, or **local BPE** subwords for much better “word” quality), data utils, small causal Transformer, `train.py`, `generate.py`, and `chat.py`. **No paid API;** `tokenizers` is the only extra dependency for BPE (see `requirements.txt`).
 
 ## Setup
 
@@ -10,7 +10,7 @@ pip install -r requirements.txt
 
 ## Workflow
 
-1. **Put text** in `data/input.txt` (the model only learns from this file).
+1. **Corpus:** by default training loads, in order, **`data/world_fields_primer.txt`**, **`data/short_form_primer.txt`**, **`data/modern_language_primer.txt`**, **`data/grammar_clarity_corpus.txt`** (large block of well-formed English: agreement, tense, clear paragraphs, labeled bad/good pairs—helps the LM toward clean grammar and coherent text), and **`data/input.txt`** (main long text). Edit `Config.corpus_files` in `config.py` to add files or change order. **After changing the corpus, retrain**; an old checkpoint’s vocabulary can miss new characters.
 2. **Train** (writes a checkpoint — path depends on profile, see below):
 
 ```bash
@@ -18,6 +18,22 @@ python train.py
 ```
 
 Quick dry run: `MAX_ITERS=100 python train.py` (PowerShell: `$env:MAX_ITERS="100"; python train.py`).
+
+### Best “communication” without an API (recommended)
+
+**BPE (ByteLevel, trained on your corpus, fully local)** predicts **subword** tokens, not raw characters—usually the largest quality jump you can get from this repo alone. It uses a **different checkpoint** (`models/baby_gpt_fast_bpe.pt` in the fast profile) and a sidecar `*.tokenizer.json` next to it. Longer default run (3000 fast steps) and larger `block_size` in **token** space are set in `config.py` when BPE is on.
+
+```powershell
+$env:BABY_GPT_FAST="1"
+$env:BABY_GPT_BPE="1"
+$env:MAX_ITERS="3000"   # or more while loss is falling
+$env:SAMPLE_EVERY="500" # optional: print a short greedy sample during training
+python train.py
+$env:BABY_GPT_BPE="1"   # so Config.default checkpoint matches
+python chat.py
+```
+
+**Char mode** (no BPE) stays the default if you do not set `BABY_GPT_BPE=1`. Old `models/baby_gpt_fast.pt` checkpoints are unchanged.
 
 ### ~30 minutes on a laptop (CPU, no GPU)
 
@@ -43,7 +59,13 @@ python chat.py
 
 Or explicitly: `python chat.py --checkpoint models/baby_gpt_fast.pt`
 
-**Realistic expectation:** output will not match a big GPU run or ChatGPT; you are trading **quality for time**. For the **big** model + long runs, unset `BABY_GPT_FAST` and use a GPU or run overnight.
+**Refining output (what actually helps):** (1) **`BABY_GPT_BPE=1` + retrain** — subword tokens (see above). (2) **Train longer** while loss falls (override `MAX_ITERS`). (3) **`python chat.py --greedy` / `--coherent`** — decoding only. (4) **Bigger / non–fast** model and overnight runs if you can. **Reality check:** this is still a **base LM** (continuation), not a full chat or instruction system; BPE + scale gets you **closer to legible text**, not human-level dialogue.
+
+**Sensible text without a paid API:** after sampling, `local_text_fix` runs on the **new continuation only** (not your prompt), so the chat UI can strip the prefix correctly — otherwise sentence-capitalization on the full string could break prefix matching and look like an “echo.” It **caps** insane repeats, trims `?!.` / newlines, optional **tail dedupe**, and optional **`light_surface_english`** on the new part only. **Decoding** uses **top-k**, **nucleus (top-p)**, and **repetition penalty** (`config.py`); chat defaults are tuned a bit to reduce copying your line verbatim.
+
+**Long lines in chat** — the model only conditions on the **last** `block_size` **tokens** (BPE) or **characters** (char mode). `chat.py` uses the same effective prefix for stripping the continuation.
+
+**Expectations:** polish helps **readability**, not deep reasoning; a weak LM may still look odd—**retrain** for real gains. On a **CPU budget**, output will not match a large GPU run or ChatGPT; unset `BABY_GPT_FAST` and use a GPU or overnight runs for the bigger model.
 
 3. **Generate one continuation** (prompt must use characters that appear in `data/input.txt`):
 
@@ -65,13 +87,13 @@ If a character was never in training, you’ll get an error for that line.
 
 ### Download a large public-domain corpus (recommended)
 
-This repo includes `scripts/fetch_corpus.py`, which pulls several English novels from **Project Gutenberg** (polite delays + User-Agent). Only use if that matches how you want to source text.
+This repo includes `scripts/fetch_corpus.py`, which pulls from **Project Gutenberg** (polite delays + User-Agent). The default list mixes **novels** with **essays, drama, science, and philosophy** so the character model sees more *registers* and topics than a single genre. That helps surface statistics across styles; it does **not** turn the model into a general reasoner (scale and task design still dominate).
 
 ```bash
 python scripts/fetch_corpus.py
 ```
 
-Optional: cap size (characters) for faster experiments:
+`--books diverse` fetches only the non-fiction / drama / essay batch; `--books novels` fetches only the long-fiction batch; default is **all** (fiction first, then diverse). Optional: cap size (characters) for faster experiments:
 
 ```bash
 python scripts/fetch_corpus.py --max-chars 1500000
